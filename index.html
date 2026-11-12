@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Operacional de Projetos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .mobile-container {
+            max-width: 430px;
+            height: 100vh;
+            margin: 0 auto;
+            background-color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        @media (min-width: 431px) {
+            .mobile-container {
+                height: 92vh;
+                margin-top: 4vh;
+                border-radius: 2rem;
+                border: 4px solid #334155;
+            }
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+
+    <div class="mobile-container">
+        <!-- HEADER FIXO -->
+        <header class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center z-10">
+            <div class="flex items-center space-x-2">
+                <div class="bg-blue-600 text-white p-2 rounded-xl font-bold text-sm">
+                    <i class="fa-solid fa-helmet-safety"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm text-slate-100">Operacional Pro</h1>
+                    <p class="text-xs text-slate-400" id="header-subtitle">Gestão de Obras & Manutenção</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="resetData()" title="Resetar Dados" class="text-slate-400 hover:text-white text-sm">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/30">
+                    OP
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTEÚDO DINÂMICO (VIEWS) -->
+        <main class="flex-1 overflow-y-auto hide-scrollbar pb-20" id="main-content">
+            <!-- Inserido dinamicamente via JS -->
+        </main>
+
+        <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 py-2 px-6 flex justify-between items-center z-20">
+            <button onclick="switchTab('painel')" id="nav-painel" class="flex flex-col items-center text-blue-500">
+                <i class="fa-solid fa-chart-pie text-lg"></i>
+                <span class="text-[10px] mt-1 font-medium">Painel</span>
+            </button>
+            <button onclick="switchTab('projetos')" id="nav-projetos" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-folder-open text-lg"></i>
+                <span class="text-[10px] mt-1 font-medium">Projetos</span>
+            </button>
+            <button onclick="switchTab('despesas')" id="nav-despesas" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-wallet text-lg"></i>
+                <span class="text-[10px] mt-1 font-medium">Despesas</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL DE NOVO PROJETO -->
+    <div id="modal-projeto" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-slate-100">Novo Projeto (Venda)</h3>
+                <button onclick="toggleModalProjeto(false)" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="salvarNovoProjeto(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Nome do Cliente / Empresa</label>
+                    <input type="text" id="novo-cliente" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Ex: Supermercado Central">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Localização (Cidade/Região)</label>
+                    <input type="text" id="novo-local" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Ex: Presidente Prudente - SP">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Tipo de Serviço</label>
+                    <select id="novo-servico" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Instalação">Instalação</option>
+                        <option value="Manutenção Preventiva">Manutenção Preventiva</option>
+                        <option value="Vistoria">Vistoria</option>
+                        <option value="Manutenção Terceirizada">Manutenção Terceirizada</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Modelo do Equipamento</label>
+                    <select id="novo-equipamento" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Eq. A - Comercial">Equipamento A - Comercial</option>
+                        <option value="Eq. B - Comercial">Equipamento B - Comercial</option>
+                        <option value="Eq. A - Residencial">Equipamento A - Residencial</option>
+                        <option value="Eq. B - Residencial">Equipamento B - Residencial</option>
+                    </select>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm transition">Cadastrar e Iniciar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE QUESTIONÁRIO DA TAREFA -->
+    <div id="modal-questionario" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+            <div class="bg-slate-800 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-sm text-white" id="q-titulo-etapa">Etapa</h3>
+                    <p class="text-xs text-blue-400" id="q-subtitulo">Validação por Questionário</p>
+                </div>
+                <button onclick="fecharQuestionario()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 flex-1 overflow-y-auto space-y-4" id="q-container-perguntas">
+                <!-- Perguntas injetadas via JS -->
+            </div>
+            <div class="bg-slate-800 p-3 border-t border-slate-700 flex space-x-2">
+                <button onclick="salvarProgressoQuest(false)" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 rounded-xl text-xs transition">Salvar Progresso</button>
+                <button onclick="salvarProgressoQuest(true)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-xl text-xs transition">Encerrar / Concluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE VISUALIZAÇÃO DE DOCUMENTOS TÉCNICOS -->
+    <div id="modal-docs" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-sm text-white" id="doc-titulo">Documento Técnico</h3>
+                <button onclick="fecharDocs()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="bg-slate-800 p-4 rounded-xl text-center space-y-3">
+                <i class="fa-solid fa-file-pdf text-4xl text-blue-400"></i>
+                <p class="text-xs text-slate-300" id="doc-descricao">Visualizando manual e diagramas de montagem padrão para o equipamento selecionado.</p>
+                <div class="border border-dashed border-slate-600 p-3 rounded-lg bg-slate-900 text-xs text-slate-400">
+                    [ Pré-visualização do Diagrama / PDF carregada com sucesso ]
+                </div>
+            </div>
+            <button onclick="fecharDocs()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-xl text-xs">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        const ETAPAS_PADRAO = [
+            { id: 1, nome: "1. Venda" },
+            { id: 2, nome: "2. Visita Técnica" },
+            { id: 3, nome: "3. Produção & Custos" },
+            { id: 4, nome: "4. Preparação Base" },
+            { id: 5, nome: "5. Liberação Obra" },
+            { id: 6, nome: "6. Transporte & Viagem" },
+            { id: 7, nome: "7. Montagem & Testes" },
+            { id: 8, nome: "8. Entrega Final" },
+            { id: 9, nome: "9. Vistoria & Preventiva" },
+            { id: 10, nome: "10. Manutenção Avulsa" }
+        ];
+
+        const PERGUNTAS_BASE = [
+            "1. Os requisitos preliminares do projeto foram conferidos no local?",
+            "2. As condições de segurança e EPIs da equipe estão em conformidade?",
+            "3. Os insumos e ferramentas necessárias foram separados e testados?",
+            "4. A infraestrutura física (elétrica/hidráulica) atende às normas?",
+            "5. O equipamento principal apresenta integridade estrutural intacta?",
+            "6. Os testes operacionais iniciais foram bem-sucedidos?",
+            "7. Houve necessidade de ajustes ou peças sobressalentes?",
+            "8. O cliente ou responsável acompanhou e validou a verificação?",
+            "9. Os registros fotográficos e medições foram devidamente salvos?",
+            "10. O ambiente foi entregue limpo e organizado após o procedimento?"
+        ];
+
+        const dadosIniciais = {
+            projetos: [
+                {
+                    id: "PRJ-001",
+                    cliente: "Supermercado Exemplo",
+                    local: "Presidente Prudente - SP",
+                    servico: "Instalação",
+                    equipamento: "Eq. A - Comercial",
+                    etapaAtualId: 3,
+                    statusGeral: "Em Execução",
+                    motivoPausa: "",
+                    etapasState: {
+                        1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:30"}] },
+                        2: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "09:00", fim: "11:00"}] },
+                        3: { status: "Em Execução", respostas: ["Sim","Sim","Não","","","","","","",""], logs: [{inicio: "13:00", fim: "14:00"}] }
+                    }
+                },
+                {
+                    id: "PRJ-002",
+                    cliente: "Residência Silva",
+                    local: "Álvares Machado - SP",
+                    servico: "Instalação",
+                    equipamento: "Eq. B - Residencial",
+                    etapaAtualId: 2,
+                    statusGeral: "Pausado",
+                    motivoPausa: "Falta aprovação de planta pelo cliente",
+                    etapasState: {
+                        1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "10:00", fim: "10:30"}] },
+                        2: { status: "Pausado", respostas: ["Sim","Não","","","","","","","",""], logs: [{inicio: "14:00", fim: "15:00"}] }
+                    }
+                }
+            ],
+            despesas: [
+                { id: "DSP-001", projetoId: "PRJ-001", data: "10/11/2026", categoria: "Combustível", valor: 180.50, obs: "Deslocamento vistoria" },
+                { id: "DSP-002", projetoId: "PRJ-002", data: "11/11/2026", categoria: "Hospedagem", valor: 220.00, obs: "Hotel equipe externa" },
+                { id: "DSP-003", projetoId: "EXTRA", data: "12/11/2026", categoria: "Outros", valor: 95.00, obs: "Compra de brocas para furadeira" }
+            ]
+        };
+
+        let appData = JSON.parse(localStorage.getItem('app_operacional_data')) || dadosIniciais;
+        let currentTab = 'painel';
+        let activeProjetoId = null;
+        let activeEtapaId = null;
+
+        function salvarStorage() {
+            localStorage.setItem('app_operacional_data', JSON.stringify(appData));
+        }
+
+        function resetData() {
+            if(confirm("Deseja restaurar os dados de demonstração iniciais?")) {
+                appData = JSON.parse(JSON.stringify(dadosIniciais));
+                salvarStorage();
+                renderCurrentView();
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            activeProjetoId = null;
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('text-blue-500');
+                btn.classList.add('text-slate-400');
+            });
+            document.getElementById(`nav-${tab}`).classList.remove('text-slate-400');
+            document.getElementById(`nav-${tab}`).classList.add('text-blue-500');
+            renderCurrentView();
+        }
+
+        function renderCurrentView() {
+            const main = document.getElementById('main-content');
+            main.innerHTML = '';
+            if (activeProjetoId) {
+                renderDetalhesProjeto(activeProjetoId);
+                return;
+            }
+            if (currentTab === 'painel') renderPainel(main);
+            else if (currentTab === 'projetos') renderProjetos(main);
+            else if (currentTab === 'despesas') renderDespesas(main);
+        }
+
+        function renderPainel(container) {
+            const totalProj = appData.projetos.length;
+            const emAndamento = appData.projetos.filter(p => p.statusGeral === 'Em Execução' || p.statusGeral === 'Aguardando').length;
+            const pausados = appData.projetos.filter(p => p.statusGeral === 'Pausado').length;
+            const finalizados = appData.projetos.filter(p => p.statusGeral === 'Finalizado').length;
+            const totalDesp = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
+
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="bg-gradient-to-r from-blue-900/50 to-slate-900 border border-blue-500/30 p-4 rounded-2xl">
+                        <h2 class="text-sm font-bold text-white mb-1">Visão Operacional Geral</h2>
+                        <p class="text-xs text-slate-300">Acompanhamento em tempo real das equipes de base e campo.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-folder text-blue-400 mr-1.5"></i> Total Projetos</div>
+                            <div class="text-xl font-bold text-white">${totalProj}</div>
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-spinner text-emerald-400 mr-1.5"></i> Em Andamento</div>
+                            <div class="text-xl font-bold text-white">${emAndamento}</div>
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-circle-pause text-amber-400 mr-1.5"></i> Pausados</div>
+                            <div class="text-xl font-bold text-white">${pausados}</div>
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-check-circle text-blue-400 mr-1.5"></i> Finalizados</div>
+                            <div class="text-xl font-bold text-white">${finalizados}</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-wallet text-emerald-400 mr-1.5"></i> Custo Total Viagens & Extras</span>
+                            <span class="text-sm font-bold text-emerald-400">R$ ${totalDesp.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Projetos Pausados / Com Alerta</h3>
+                        ${pausados === 0 ? '<div class="bg-slate-800/40 border border-slate-800 p-3 rounded-xl text-xs text-slate-400 text-center">Nenhum projeto pausado no momento.</div>' : ''}
+                        ${appData.projetos.filter(p => p.statusGeral === 'Pausado').map(p => `
+                            <div onclick="abrirDetalhesProjeto('${p.id}')" class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl cursor-pointer hover:bg-amber-500/20 transition">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-xs font-bold text-amber-400">${p.id} - ${p.cliente}</span>
+                                    <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full">Pausado</span>
+                                </div>
+                                <p class="text-xs text-slate-300 italic"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${p.motivoPausa || 'Aguardando liberação'}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProjetos(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center mb-1">
+                        <h2 class="text-sm font-bold text-white">Lista de Projetos</h2>
+                        <button onclick="toggleModalProjeto(true)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-plus"></i><span>Novo Projeto</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-2.5">
+                        ${appData.projetos.map(p => {
+                            const etapaNome = ETAPAS_PADRAO.find(e => e.id === p.etapaAtualId)?.nome || 'Concluído';
+                            let badgeColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+                            if(p.statusGeral === 'Pausado') badgeColor = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                            if(p.statusGeral === 'Finalizado') badgeColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+
+                            return `
+                                <div onclick="abrirDetalhesProjeto('${p.id}')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer hover:border-blue-500/50 transition">
+                                    <div class="flex justify-between items-start mb-1.5">
+                                        <div>
+                                            <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">${p.id}</span>
+                                            <h3 class="text-sm font-bold text-white mt-1">${p.cliente}</h3>
+                                        </div>
+                                        <span class="text-[10px] px-2 py-0.5 rounded-full border ${badgeColor} font-medium">${p.statusGeral}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-xs text-slate-400 mt-2 pt-2 border-t border-slate-700/50">
+                                        <span><i class="fa-solid fa-location-dot mr-1 text-slate-500"></i>${p.local}</span>
+                                        <span class="text-slate-300 font-medium"><i class="fa-solid fa-layer-group mr-1 text-blue-400"></i>${etapaNome}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function abrirDetalhesProjeto(id) {
+            activeProjetoId = id;
+            renderCurrentView();
+        }
+
+        function voltarListaProjetos() {
+            activeProjetoId = null;
+            renderCurrentView();
+        }
+
+        function renderDetalhesProjeto(id) {
+            const p = appData.projetos.find(item => item.id === id);
+            const container = document.getElementById('main-content');
+
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <button onclick="voltarListaProjetos()" class="bg-slate-800 text-slate-300 hover:text-white px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 border border-slate-700">
+                            <i class="fa-solid fa-arrow-left"></i><span>Voltar</span>
+                        </button>
+                        <span class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-1 rounded-md">${p.id}</span>
+                    </div>
+
+                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <h2 class="text-base font-bold text-white">${p.cliente}</h2>
+                        <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-wrench mr-1"></i> ${p.servico} • ${p.equipamento}</p>
+                        <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i> ${p.local}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-0.5">Manuais e Guias Técnicos</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="abrirDocs('Diagrama Elétrico - ${p.equipamento}')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-2.5 rounded-xl text-center flex flex-col items-center transition">
+                                <i class="fa-solid fa-bolt text-amber-400 text-sm mb-1"></i>
+                                <span class="text-[10px] text-slate-200 font-medium">Diagrama</span>
+                            </button>
+                            <button onclick="abrirDocs('Manual de Montagem - ${p.equipamento}')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-2.5 rounded-xl text-center flex flex-col items-center transition">
+                                <i class="fa-solid fa-book text-blue-400 text-sm mb-1"></i>
+                                <span class="text-[10px] text-slate-200 font-medium">Manual</span>
+                            </button>
+                            <button onclick="abrirDocs('Normas & Guia de Vistoria')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-2.5 rounded-xl text-center flex flex-col items-center transition">
+                                <i class="fa-solid fa-shield-halved text-emerald-400 text-sm mb-1"></i>
+                                <span class="text-[10px] text-slate-200 font-medium">Normas</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-0.5">Fluxo de Etapas e Checklists</p>
+                        
+                        ${ETAPAS_PADRAO.map(etapa => {
+                            const state = p.etapasState[etapa.id] || { status: 'Aguardando', respostas: [], logs: [] };
+                            const isAtual = etapa.id === p.etapaAtualId;
+                            const isConcluida = state.status === 'Finalizado';
+                            const isPausada = state.status === 'Pausado';
+                            const isBloqueada = etapa.id > p.etapaAtualId;
+
+                            let borderColor = 'border-slate-800';
+                            let bgColor = 'bg-slate-900/60';
+                            let statusBadge = '<span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Aguardando</span>';
+
+                            if(isConcluida) {
+                                borderColor = 'border-emerald-500/30';
+                                bgColor = 'bg-slate-800/50';
+                                statusBadge = '<span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-md">Concluído</span>';
+                            } else if(isAtual) {
+                                borderColor = isPausada ? 'border-amber-500/50' : 'border-blue-500/60';
+                                bgColor = 'bg-slate-800';
+                                statusBadge = isPausada ? '<span class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-md">Pausado</span>' : '<span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-md">Em Execução</span>';
+                            } else if(isBloqueada) {
+                                statusBadge = '<span class="text-[10px] bg-slate-900 text-slate-600 px-2 py-0.5 rounded-md">Bloqueado</span>';
+                            }
+
+                            if(isBloqueada && !isConcluida && !isAtual) return '';
+
+                            const ultimoLog = state.logs[state.logs.length - 1];
+
+                            return `
+                                <div class="border ${borderColor} ${bgColor} rounded-2xl p-3.5 space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-xs font-bold text-slate-300">${etapa.nome}</span>
+                                        </div>
+                                        ${statusBadge}
+                                    </div>
+
+                                    ${isAtual ? `
+                                        <div class="pt-2 border-t border-slate-700/50 space-y-2">
+                                            <div class="text-[11px] text-slate-300 flex justify-between items-center">
+                                                <span>Sessão: ${ultimoLog ? `Início ${ultimoLog.inicio}` : 'Não Iniciada'}</span>
+                                                <span class="text-blue-400 font-medium">${state.respostas.filter(r=>r).length}/10 respondidas</span>
+                                            </div>
+
+                                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                                <button onclick="iniciarTarefa('${p.id}', ${etapa.id})" class="bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-xl text-xs font-medium transition">
+                                                    <i class="fa-solid fa-play mr-1 text-emerald-400"></i> Iniciar
+                                                </button>
+                                                <button onclick="abrirQuestionario('${p.id}', ${etapa.id})" class="bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-xl text-xs font-medium transition">
+                                                    <i class="fa-solid fa-list-check mr-1"></i> Questionário
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDespesas(container) {
+            const projetosAtivos = appData.projetos.filter(p => p.statusGeral !== 'Finalizado' && p.statusGeral !== 'Cancelado');
+            const totalDespesas = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
+
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
+                        <h2 class="text-sm font-bold text-white mb-3">Lançamento de Despesas de Campo</h2>
+                        <form onsubmit="salvarDespesa(event)" class="space-y-3">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Vincular ao Projeto ou Extra</label>
+                                <select id="desp-projeto" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                                    <option value="EXTRA">⭐ Despesa Extra / Avulsa (Sem Projeto)</option>
+                                    ${projetosAtivos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente} (${p.statusGeral})</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+                                    <select id="desp-cat" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                                        <option value="Combustível">Combustível</option>
+                                        <option value="Alimentação">Alimentação</option>
+                                        <option value="Hospedagem">Hospedagem</option>
+                                        <option value="Outros">Outros</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">Valor (R$)</label>
+                                    <input type="number" step="0.01" id="desp-valor" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="0.00">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Observação</label>
+                                <input type="text" id="desp-obs" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Abastecimento posto">
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl text-sm transition">Salvar Lançamento</button>
+                        </form>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center px-1">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Histórico</h3>
+                            <span class="text-xs font-bold text-emerald-400">Total: R$ ${totalDespesas.toFixed(2)}</span>
+                        </div>
+                        ${appData.despesas.map(d => `
+                            <div class="bg-slate-800/80 border border-slate-700/60 p-3 rounded-xl flex justify-between items-center">
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded font-bold">${d.projetoId}</span>
+                                        <span class="text-xs font-bold text-white">${d.categoria}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-400 mt-1">${d.obs}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-bold text-emerald-400">R$ ${d.valor.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleModalProjeto(show) {
+            document.getElementById('modal-projeto').classList.toggle('hidden', !show);
+        }
+
+        function salvarNovoProjeto(e) {
+            e.preventDefault();
+            const cliente = document.getElementById('novo-cliente').value;
+            const local = document.getElementById('novo-local').value;
+            const servico = document.getElementById('novo-servico').value;
+            const equipamento = document.getElementById('novo-equipamento').value;
+            const novoId = `PRJ-0${appData.projetos.length + 1}`;
+
+            const novoProj = {
+                id: novoId,
+                cliente, local, servico, equipamento,
+                etapaAtualId: 2,
+                statusGeral: "Em Execução",
+                motivoPausa: "",
+                etapasState: {
+                    1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:10"}] },
+                    2: { status: "Em Execução", respostas: Array(10).fill(""), logs: [{inicio: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), fim: ""}] }
+                }
+            };
+
+            appData.projetos.push(novoProj);
+            salvarStorage();
+            toggleModalProjeto(false);
+            switchTab('projetos');
+        }
+
+        function iniciarTarefa(projetoId, etapaId) {
+            const p = appData.projetos.find(x => x.id === projetoId);
+            if(!p.etapasState[etapaId]) {
+                p.etapasState[etapaId] = { status: "Em Execução", respostas: Array(10).fill(""), logs: [] };
+            }
+            const horaAtual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            p.etapasState[etapaId].logs.push({ inicio: horaAtual, fim: "" });
+            p.statusGeral = "Em Execução";
+            p.motivoPausa = "";
+            salvarStorage();
+            renderDetalhesProjeto(projetoId);
+        }
+
+        function abrirQuestionario(projetoId, etapaId) {
+            activeProjetoId = projetoId;
+            activeEtapaId = etapaId;
+            const p = appData.projetos.find(x => x.id === projetoId);
+            const etapa = ETAPAS_PADRAO.find(e => e.id === etapaId);
+            const state = p.etapasState[etapaId] || { respostas: Array(10).fill("") };
+
+            document.getElementById('q-titulo-etapa').innerText = `${p.id} - ${etapa.nome}`;
+            
+            const container = document.getElementById('q-container-perguntas');
+            container.innerHTML = PERGUNTAS_BASE.map((pergunta, idx) => {
+                const respAtual = state.respostas[idx] || "";
+                return `
+                    <div class="bg-slate-800 p-3 rounded-xl space-y-2 border border-slate-700">
+                        <p class="text-xs font-medium text-slate-200">${pergunta}</p>
+                        <select id="resp-${idx}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                            <option value="">Selecione a resposta...</option>
+                            <option value="Sim" ${respAtual === 'Sim' ? 'selected' : ''}>Sim / Conforme</option>
+                            <option value="Não" ${respAtual === 'Não' ? 'selected' : ''}>Não / Problema</option>
+                            <option value="N/A" ${respAtual === 'N/A' ? 'selected' : ''}>N/A</option>
+                        </select>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('modal-questionario').classList.remove('hidden');
+        }
+
+        function fecharQuestionario() {
+            document.getElementById('modal-questionario').classList.add('hidden');
+        }
+
+        function salvarProgressoQuest(tentarEncerrar) {
+            const p = appData.projetos.find(x => x.id === activeProjetoId);
+            if(!p.etapasState[activeEtapaId]) {
+                p.etapasState[activeEtapaId] = { respostas: [], status: "Em Execução", logs: [] };
+            }
+
+            let novasRespostas = [];
+            let temProblema = false;
+            let emBranco = false;
+
+            for(let i=0; i<10; i++) {
+                const val = document.getElementById(`resp-${i}`).value;
+                novasRespostas.push(val);
+                if(!val) emBranco = true;
+                if(val === 'Não') temProblema = true;
+            }
+
+            p.etapasState[activeEtapaId].respostas = novasRespostas;
+
+            if(tentarEncerrar) {
+                if(emBranco) {
+                    alert("Atenção: Existem perguntas em branco no questionário.");
+                    return;
+                }
+
+                if(temProblema) {
+                    const motivo = prompt("Foi detectado um problema. Digite o motivo do bloqueio:");
+                    p.etapasState[activeEtapaId].status = "Pausado";
+                    p.statusGeral = "Pausado";
+                    p.motivoPausa = motivo || "Problema apontado no questionário";
+                    alert("Projeto entrou em PAUSA.");
+                } else {
+                    p.etapasState[activeEtapaId].status = "Finalizado";
+                    if(activeEtapaId < 10) {
+                        p.etapaAtualId = activeEtapaId + 1;
+                        if(!p.etapasState[p.etapaAtualId]) {
+                            p.etapasState[p.etapaAtualId] = { status: "Em Execução", respostas: Array(10).fill(""), logs: [{inicio: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), fim: ""}] };
+                        }
+                    } else {
+                        p.statusGeral = "Finalizado";
+                    }
+                    if(p.statusGeral !== "Pausado") {
+                        p.statusGeral = activeEtapaId === 10 ? "Finalizado" : "Em Execução";
+                        p.motivoPausa = "";
+                    }
+                    alert("Etapa validada com sucesso!");
+                }
+            } else {
+                alert("Progresso salvo com sucesso!");
+            }
+
+            salvarStorage();
+            fecharQuestionario();
+            renderDetalhesProjeto(activeProjetoId);
+        }
+
+        function abrirDocs(titulo) {
+            document.getElementById('doc-titulo').innerText = titulo;
+            document.getElementById('modal-docs').classList.remove('hidden');
+        }
+
+        function fecharDocs() {
+            document.getElementById('modal-docs').classList.add('hidden');
+        }
+
+        function salvarDespesa(e) {
+            e.preventDefault();
+            const projetoId = document.getElementById('desp-projeto').value;
+            const categoria = document.getElementById('desp-cat').value;
+            const valor = parseFloat(document.getElementById('desp-valor').value);
+            const obs = document.getElementById('desp-obs').value;
+            const novoId = `DSP-0${appData.despesas.length + 1}`;
+
+            appData.despesas.push({ id: novoId, projetoId, data: new Date().toLocaleDateString('pt-BR'), categoria, valor, obs });
+            salvarStorage();
+            renderCurrentView();
+            alert("Despesa lançada com sucesso!");
+        }
+
+        renderCurrentView();
+    </script>
+</body>
+</html>
