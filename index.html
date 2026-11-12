@@ -29,21 +29,9 @@
         }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .radio-btn:checked + label {
-            background-color: #2563eb;
-            border-color: #3b82f6;
-            color: white;
-        }
-        .radio-btn-no:checked + label {
-            background-color: #d97706;
-            border-color: #f59e0b;
-            color: white;
-        }
-        .radio-btn-na:checked + label {
-            background-color: #475569;
-            border-color: #64748b;
-            color: white;
-        }
+        .radio-btn:checked + label { background-color: #2563eb; border-color: #3b82f6; color: white; }
+        .radio-btn-no:checked + label { background-color: #d97706; border-color: #f59e0b; color: white; }
+        .radio-btn-na:checked + label { background-color: #475569; border-color: #64748b; color: white; }
     </style>
 </head>
 <body class="flex items-center justify-center">
@@ -62,21 +50,18 @@
             <form onsubmit="fazerLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Usuário</label>
-                    <input type="text" id="login-user" value="admin" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="admin">
+                    <input type="text" id="login-user" value="admin" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Senha</label>
-                    <input type="password" id="login-pass" value="admin" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="•••••">
+                    <input type="password" id="login-pass" value="admin" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500">
                 </div>
                 <p id="login-erro" class="text-xs text-red-400 hidden text-center">Usuário ou senha inválidos. Use admin / admin.</p>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
-                    Entrar no Sistema
-                </button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg">Entrar no Sistema</button>
             </form>
-            <p class="text-[10px] text-slate-500 text-center mt-6">Acesso padrão: admin / admin</p>
         </div>
 
-        <!-- MENU LATERAL RETRÁTIL (DRAWER) -->
+        <!-- MENU LATERAL RETRÁTIL -->
         <div id="side-drawer-overlay" onclick="toggleDrawer(false)" class="absolute inset-0 bg-black/60 z-40 hidden transition-opacity"></div>
         <aside id="side-drawer" class="absolute top-0 bottom-0 left-0 w-64 bg-slate-900 border-r border-slate-700 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center">
@@ -93,11 +78,14 @@
                 <button onclick="navigate('projetos')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <i class="fa-solid fa-folder-open w-4 text-emerald-400"></i><span>Projetos & Obras</span>
                 </button>
+                <button onclick="navigate('pendencias')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-triangle-exclamation w-4 text-amber-400"></i><span>Pendências</span>
+                </button>
                 <button onclick="navigate('clientes')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <i class="fa-solid fa-users w-4 text-purple-400"></i><span>Clientes</span>
                 </button>
                 <button onclick="navigate('agenda')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
-                    <i class="fa-solid fa-calendar-days w-4 text-amber-400"></i><span>Agenda & Vistorias</span>
+                    <i class="fa-solid fa-calendar-days w-4 text-yellow-400"></i><span>Agenda & Vistorias</span>
                 </button>
                 <button onclick="navigate('despesas')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <i class="fa-solid fa-wallet w-4 text-teal-400"></i><span>Despesas</span>
@@ -107,10 +95,10 @@
                 </button>
             </div>
             <div class="p-3 border-t border-slate-800 space-y-2">
-                <button onclick="resetData()" class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                <button onclick="resetData()" class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs text-slate-400 hover:bg-slate-800">
                     <i class="fa-solid fa-rotate-right"></i><span>Resetar Dados Teste</span>
                 </button>
-                <button onclick="fazerLogout()" class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-500/10 transition">
+                <button onclick="fazerLogout()" class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-500/10">
                     <i class="fa-solid fa-right-from-bracket"></i><span>Sair (Logout)</span>
                 </button>
             </div>
@@ -127,16 +115,14 @@
                     <p class="text-[10px] text-slate-400">Operacional Pro</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded-md border border-blue-500/20 font-semibold">ADMIN</span>
-            </div>
+            <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded-md border border-blue-500/20 font-semibold">ADMIN</span>
         </header>
 
         <!-- CONTEÚDO DINÂMICO -->
         <main class="flex-1 overflow-y-auto hide-scrollbar pb-20" id="main-content"></main>
 
         <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
-        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 py-2 px-3 flex justify-around items-center z-20">
+        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 py-2 px-2 flex justify-around items-center z-20">
             <button onclick="navigate('painel')" id="nav-painel" class="flex flex-col items-center text-blue-500">
                 <i class="fa-solid fa-chart-pie text-base"></i>
                 <span class="text-[9px] mt-1 font-medium">Painel</span>
@@ -144,6 +130,10 @@
             <button onclick="navigate('projetos')" id="nav-projetos" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
                 <i class="fa-solid fa-folder-open text-base"></i>
                 <span class="text-[9px] mt-1 font-medium">Projetos</span>
+            </button>
+            <button onclick="navigate('pendencias')" id="nav-pendencias" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Pendências</span>
             </button>
             <button onclick="navigate('clientes')" id="nav-clientes" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
                 <i class="fa-solid fa-users text-base"></i>
@@ -157,64 +147,48 @@
                 <i class="fa-solid fa-wallet text-base"></i>
                 <span class="text-[9px] mt-1 font-medium">Despesas</span>
             </button>
-            <button onclick="navigate('logs')" id="nav-logs" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
-                <i class="fa-solid fa-clock-rotate-left text-base"></i>
-                <span class="text-[9px] mt-1 font-medium">Logs</span>
-            </button>
         </nav>
     </div>
 
-    <!-- MODAL: NOVO PROJETO -->
-    <div id="modal-projeto" class="fixed inset-0 bg-black/75 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-base text-slate-100">Novo Projeto (Venda)</h3>
-                <button onclick="fecharModal('modal-projeto')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <!-- MODAL: ERRO / PROBLEMA EM ETAPA (EXIGE FOTO) -->
+    <div id="modal-erro-etapa" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-base text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Registrar Erro / Pendência</h3>
+                <button onclick="fecharModal('modal-erro-etapa')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form onsubmit="salvarNovoProjeto(event)" class="space-y-3">
+            <p class="text-xs text-slate-300">Esta ação irá pausar a etapa atual e gerar uma pendência oficial para acompanhamento.</p>
+            <form onsubmit="salvarErroEtapa(event)" class="space-y-3">
+                <input type="hidden" id="err-etapa-id">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Selecionar Cliente</label>
-                    <select id="novo-proj-cliente" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"></select>
+                    <label class="block text-xs text-slate-400 mb-1">Descrição do Problema / Ocorrência</label>
+                    <textarea id="err-descricao" required rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-white" placeholder="Descreva detalhadamente o ocorrido..."></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Localização da Obra</label>
-                    <input type="text" id="novo-proj-local" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Presidente Prudente - SP">
+                    <label class="block text-xs text-amber-400 mb-1 font-bold"><i class="fa-solid fa-camera mr-1"></i> Foto Obrigatória da Ocorrência</label>
+                    <input type="file" id="err-foto" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white hover:file:bg-amber-500">
                 </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Tipo de Serviço</label>
-                    <select id="novo-proj-servico" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                        <option value="Instalação">Instalação</option>
-                        <option value="Manutenção Preventiva">Manutenção Preventiva</option>
-                        <option value="Vistoria">Vistoria</option>
-                        <option value="Manutenção Terceirizada">Manutenção Terceirizada</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Equipamento</label>
-                    <select id="novo-proj-equip" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                        <option value="Eq. A - Comercial">Equipamento A - Comercial</option>
-                        <option value="Eq. B - Comercial">Equipamento B - Comercial</option>
-                        <option value="Eq. A - Residencial">Equipamento A - Residencial</option>
-                        <option value="Eq. B - Residencial">Equipamento B - Residencial</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm mt-2">Criar Projeto</button>
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2.5 rounded-xl text-xs transition">Registrar Erro & Pausar</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: QUESTIONÁRIO DA TAREFA (COM BOTÕES DE RÁDIO E BOTÃO ÚNICO CONCLUIR/SALVAR) -->
+    <!-- MODAL: QUESTIONÁRIO DA TAREFA (COM FOTO OBRIGATÓRIA E HORA DE FIM) -->
     <div id="modal-questionario" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-3">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-md h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-md h-[92vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
             <div class="bg-slate-800 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
                 <div>
                     <h3 class="font-bold text-sm text-white" id="q-titulo-etapa">Etapa</h3>
-                    <p class="text-[11px] text-blue-400">Responda todas como "Sim" para concluir automaticamente</p>
+                    <p class="text-[11px] text-blue-400">Responda todas as perguntas e envie a foto de validação</p>
                 </div>
                 <button onclick="fecharModal('modal-questionario')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-4 flex-1 overflow-y-auto space-y-3" id="q-container-perguntas"></div>
-            <div class="bg-slate-800 p-3 border-t border-slate-700">
+            <div class="p-4 bg-slate-900 border-t border-slate-800 space-y-2">
+                <div>
+                    <label class="block text-xs text-blue-400 mb-1 font-bold"><i class="fa-solid fa-camera mr-1"></i> Foto de Evidência da Etapa (Obrigatória)</label>
+                    <input type="file" id="q-foto-evidencia" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+                </div>
                 <button onclick="processarFormularioEtapa()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg">
                     <i class="fa-solid fa-check-double mr-1.5"></i> Concluir / Salvar Progresso
                 </button>
@@ -222,7 +196,25 @@
         </div>
     </div>
 
-    <!-- MODAL: ADICIONAR / EDITAR DESPESA -->
+    <!-- MODAL: INICIAR / ENCERRAR TEMPO NA OBRA COM FOTOS -->
+    <div id="modal-tempo-obra" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-base text-white" id="modal-obra-titulo">Controle de Tempo na Obra</h3>
+                <button onclick="fecharModal('modal-tempo-obra')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-300" id="modal-obra-desc">Para registrar a entrada/saída na obra, envie a foto comprobatória do estado atual.</p>
+            <form onsubmit="salvarTempoObra(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-blue-400 mb-1 font-bold"><i class="fa-solid fa-camera mr-1"></i> Foto Comprobatória Obrigatória</label>
+                    <input type="file" id="obra-foto" accept="image/*" required class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+                </div>
+                <button type="submit" id="btn-submit-obra" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs transition">Confirmar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- OUTROS MODAIS EXISTENTES (DESPESAS, ARQUIVOS, CLIENTE, ETC) -->
     <div id="modal-despesa" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -259,7 +251,6 @@
         </div>
     </div>
 
-    <!-- MODAL: ADICIONAR ARQUIVO AO PROJETO -->
     <div id="modal-arquivo" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -268,11 +259,11 @@
             </div>
             <form onsubmit="salvarArquivoProjeto(event)" class="space-y-3">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Nome / Título do Arquivo</label>
-                    <input type="text" id="arq-nome" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Planta Baixa Rev02.pdf">
+                    <label class="block text-xs text-slate-400 mb-1">Nome do Arquivo</label>
+                    <input type="text" id="arq-nome" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Planta Baixa.pdf">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Tipo de Documento</label>
+                    <label class="block text-xs text-slate-400 mb-1">Tipo</label>
                     <select id="arq-tipo" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                         <option value="Diagrama Elétrico">Diagrama Elétrico</option>
                         <option value="Manual de Montagem">Manual de Montagem</option>
@@ -281,31 +272,26 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Selecionar Arquivo (Simulação)</label>
-                    <input type="file" id="arq-file" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+                    <input type="file" id="arq-file" required class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Anexar Arquivo</button>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Anexar</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: ETIQUETA DE IDENTIFICAÇÃO -->
     <div id="modal-etiqueta" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-3">
                 <h3 class="font-bold text-sm text-white">Pré-visualização de Etiqueta</h3>
                 <button onclick="fecharModal('modal-etiqueta')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="etiqueta-preview" class="bg-white text-slate-900 p-4 rounded-xl border-2 border-dashed border-slate-400 space-y-2">
-                <!-- Conteúdo da etiqueta -->
-            </div>
-            <button onclick="window.print()" class="w-full mt-4 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2">
+            <div id="etiqueta-preview" class="bg-white text-slate-900 p-4 rounded-xl border-2 border-dashed border-slate-400 space-y-2"></div>
+            <button onclick="window.print()" class="w-full mt-4 bg-blue-600 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-print"></i><span>Imprimir Etiqueta</span>
             </button>
         </div>
     </div>
 
-    <!-- MODAL: NOVO / EDITAR CLIENTE -->
     <div id="modal-cliente" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -315,23 +301,22 @@
             <form onsubmit="salvarCliente(event)" class="space-y-3">
                 <input type="hidden" id="cli-edit-id">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Nome / Razão Social</label>
+                    <label class="block text-xs text-slate-400 mb-1">Nome</label>
                     <input type="text" id="cli-nome" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Telefone / WhatsApp</label>
-                    <input type="text" id="cli-tel" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="(18) 99999-9999">
+                    <label class="block text-xs text-slate-400 mb-1">Telefone</label>
+                    <input type="text" id="cli-tel" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Cidade / Endereço</label>
+                    <label class="block text-xs text-slate-400 mb-1">Cidade</label>
                     <input type="text" id="cli-cidade" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Salvar Cliente</button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2.5 rounded-xl text-sm">Salvar</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: NOVO EVENTO NA AGENDA -->
     <div id="modal-evento" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
@@ -344,20 +329,59 @@
                     <input type="date" id="ev-data" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Projeto Vinculado</label>
+                    <label class="block text-xs text-slate-400 mb-1">Projeto</label>
                     <select id="ev-projeto" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"></select>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Descrição do Compromisso</label>
-                    <input type="text" id="ev-titulo" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Vistoria Técnica Inicial">
+                    <label class="block text-xs text-slate-400 mb-1">Título</label>
+                    <input type="text" id="ev-titulo" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Agendar</button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2.5 rounded-xl text-sm">Agendar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO PROJETO -->
+    <div id="modal-projeto" class="fixed inset-0 bg-black/75 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-slate-100">Novo Projeto (Venda)</h3>
+                <button onclick="fecharModal('modal-projeto')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="salvarNovoProjeto(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Cliente</label>
+                    <select id="novo-proj-cliente" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"></select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Localização / Endereço (para Waze)</label>
+                    <input type="text" id="novo-proj-local" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Av. Washington Luiz, Pres. Prudente - SP">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Tipo de Serviço</label>
+                    <select id="novo-proj-servico" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                        <option value="Instalação">Instalação</option>
+                        <option value="Manutenção Preventiva">Manutenção Preventiva</option>
+                        <option value="Vistoria">Vistoria</option>
+                        <option value="Manutenção Terceirizada">Manutenção Terceirizada</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Equipamento</label>
+                    <select id="novo-proj-equip" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                        <option value="Eq. A - Comercial">Equipamento A - Comercial</option>
+                        <option value="Eq. B - Comercial">Equipamento B - Comercial</option>
+                        <option value="Eq. A - Residencial">Equipamento A - Residencial</option>
+                        <option value="Eq. B - Residencial">Equipamento B - Residencial</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm mt-2">Criar Projeto</button>
             </form>
         </div>
     </div>
 
     <script>
-        const ETAPAS_PADRAO = [
+        const ETAPAS_INSTALACAO = [
             { id: 1, nome: "1. Venda" },
             { id: 2, nome: "2. Visita Técnica" },
             { id: 3, nome: "3. Produção & Custos" },
@@ -365,9 +389,12 @@
             { id: 5, nome: "5. Liberação Obra" },
             { id: 6, nome: "6. Transporte & Viagem" },
             { id: 7, nome: "7. Montagem & Testes" },
-            { id: 8, nome: "8. Entrega Final" },
-            { id: 9, nome: "9. Vistoria & Preventiva" },
-            { id: 10, nome: "10. Manutenção Avulsa" }
+            { id: 8, nome: "8. Entrega Final" }
+        ];
+
+        const TAREFAS_RECORRENTES = [
+            { id: 9, nome: "Vistorias Periódicas" },
+            { id: 10, nome: "Manutenções Preventivas / Avulsas" }
         ];
 
         const PERGUNTAS_BASE = [
@@ -386,77 +413,56 @@
         const dadosIniciais = {
             clientes: [
                 { id: "CLI-001", nome: "Supermercado Exemplo", tel: "(18) 99711-2233", cidade: "Presidente Prudente - SP" },
-                { id: "CLI-002", nome: "Residência Silva", tel: "(18) 99644-5566", cidade: "Álvares Machado - SP" },
-                { id: "CLI-003", nome: "Hospital Central", tel: "(18) 3221-0099", cidade: "Presidente Prudente - SP" }
+                { id: "CLI-002", nome: "Residência Silva", tel: "(18) 99644-5566", cidade: "Álvares Machado - SP" }
             ],
             projetos: [
                 {
                     id: "PRJ-001",
                     clienteId: "CLI-001",
                     cliente: "Supermercado Exemplo",
-                    local: "Presidente Prudente - SP",
+                    local: "Av. Washington Luiz, 1200, Presidente Prudente - SP",
                     servico: "Instalação",
                     equipamento: "Eq. A - Comercial",
                     etapaAtualId: 3,
                     statusGeral: "Em Execução",
                     motivoPausa: "",
-                    emTrabalho: true,
-                    arquivos: [
-                        { nome: "Diagrama_Eletrico_A.pdf", tipo: "Diagrama Elétrico", data: "10/11/2026" },
-                        { nome: "Manual_Montagem_Comercial.pdf", tipo: "Manual de Montagem", data: "10/11/2026" }
-                    ],
+                    emObraAtiva: false,
+                    arquivos: [{ nome: "Diagrama_Eletrico_A.pdf", tipo: "Diagrama Elétrico", data: "10/11/2026" }],
                     etapasState: {
-                        1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:30"}] },
-                        2: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "09:00", fim: "11:00"}] },
-                        3: { status: "Em Execução", respostas: ["Sim","Sim","Não","","","","","","",""], logs: [{inicio: "13:00", fim: ""}] }
-                    }
-                },
-                {
-                    id: "PRJ-002",
-                    clienteId: "CLI-002",
-                    cliente: "Residência Silva",
-                    local: "Álvares Machado - SP",
-                    servico: "Instalação",
-                    equipamento: "Eq. B - Residencial",
-                    etapaAtualId: 2,
-                    statusGeral: "Pausado",
-                    motivoPausa: "Falta aprovação de planta pelo cliente",
-                    emTrabalho: false,
-                    arquivos: [
-                        { nome: "Planta_Residencial_Silva.pdf", tipo: "Planta / Projeto", data: "11/11/2026" }
-                    ],
-                    etapasState: {
-                        1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "10:00", fim: "10:30"}] },
-                        2: { status: "Pausado", respostas: ["Sim","Não","","","","","","","",""], logs: [{inicio: "14:00", fim: "15:00"}] }
+                        1: { status: "Finalizado", respostas: Array(10).fill("Sim"), horaFim: "08:30", fotos: ["foto1.jpg"] },
+                        2: { status: "Finalizado", respostas: Array(10).fill("Sim"), horaFim: "11:00", fotos: ["foto2.jpg"] },
+                        3: { status: "Em Execução", respostas: ["Sim","Sim","","","","","","","",""], horaFim: "", fotos: [] }
+                    },
+                    recorrentesState: {
+                        9: { status: "Pendente", agendadoPara: "2026-11-25", fotos: [] },
+                        10: { status: "Pendente", agendadoPara: "2026-12-10", fotos: [] }
                     }
                 }
             ],
+            pendencias: [
+                { id: "PEN-001", projetoId: "PRJ-001", etapaId: 3, descricao: "Falta liberação de insumos terceirizados.", dataHora: "12/11/2026 14:15", status: "Pendente" }
+            ],
             despesas: [
-                { id: "DSP-001", projetoId: "PRJ-001", data: "10/11/2026", categoria: "Combustível", valor: 180.50, obs: "Deslocamento vistoria" },
-                { id: "DSP-002", projetoId: "PRJ-001", data: "12/11/2026", categoria: "Alimentação", valor: 65.00, obs: "Almoço equipe" },
-                { id: "DSP-003", projetoId: "PRJ-002", data: "11/11/2026", categoria: "Hospedagem", valor: 220.00, obs: "Hotel equipe externa" },
-                { id: "DSP-004", projetoId: "EXTRA", data: "12/11/2026", categoria: "Outros", valor: 95.00, obs: "Compra de brocas para furadeira" }
+                { id: "DSP-001", projetoId: "PRJ-001", data: "10/11/2026", categoria: "Combustível", valor: 180.50, obs: "Deslocamento vistoria" }
             ],
             agenda: [
-                { id: "EV-001", data: "2026-11-12", projetoId: "PRJ-001", titulo: "Conferência de Produção & Insumos" },
-                { id: "EV-002", data: "2026-11-15", projetoId: "PRJ-002", titulo: "Retorno Visita Técnica Silva" },
-                { id: "EV-003", data: "2026-11-20", projetoId: "PRJ-001", titulo: "Previsão Montagem Supermercado" }
+                { id: "EV-001", data: "2026-11-20", projetoId: "PRJ-001", titulo: "Vistoria Periódica Agendada" }
             ],
             logs: [
-                { dataHora: "12/11/2026 08:00", acao: "Sistema", detalhe: "Sistema iniciado com dados operacionais." },
-                { dataHora: "12/11/2026 13:00", acao: "PRJ-001", detalhe: "Iniciada execução na etapa 3. Produção & Custos." }
+                { dataHora: "12/11/2026 08:00", acao: "Sistema", detalhe: "Sistema operacional iniciado com sucesso." }
             ]
         };
 
-        let appData = JSON.parse(localStorage.getItem('operacional_pro_v2')) || dadosIniciais;
+        let appData = JSON.parse(localStorage.getItem('operacional_pro_v3')) || dadosIniciais;
         let currentTab = 'painel';
         let activeProjetoId = null;
         let activeClienteId = null;
         let activeEtapaId = null;
-        let mesAgendaAtual = new Date(2026, 10, 1); // Novembro 2026
+        let acaoObraTemp = null; // 'iniciar' ou 'encerrar'
+        let mesAgendaAtual = new Date(2026, 10, 1);
 
         function salvarStorage() {
-            localStorage.setItem('operacional_pro_v2', JSON.stringify(appData));
+            localStorage.setItem('operacional_pro_v3', JSON.stringify(appData));
         }
 
         function registrarLog(acao, detalhe) {
@@ -475,7 +481,6 @@
             }
         }
 
-        // AUTENTICAÇÃO
         function fazerLogin(e) {
             e.preventDefault();
             const u = document.getElementById('login-user').value.trim();
@@ -492,10 +497,9 @@
         function fazerLogout() {
             toggleDrawer(false);
             document.getElementById('login-screen').classList.remove('hidden');
-            registrarLog("Logout", "Usuário encerrou a sessão.");
+            registrarLog("Logout", "Usuário encerrou sessão.");
         }
 
-        // DRAWER LATERAL
         function toggleDrawer(open) {
             const drawer = document.getElementById('side-drawer');
             const overlay = document.getElementById('side-drawer-overlay');
@@ -521,10 +525,11 @@
             const titles = {
                 painel: "Painel Gerencial",
                 projetos: "Projetos & Obras",
+                pendencias: "Pendências Ativas",
                 clientes: "Gestão de Clientes",
                 agenda: "Agenda Operacional",
                 despesas: "Controle de Despesas",
-                logs: "Logs de Atividade"
+                logs: "Logs do Sistema"
             };
             document.getElementById('header-title').innerText = titles[tab] || "Operacional Pro";
 
@@ -544,17 +549,12 @@
             const main = document.getElementById('main-content');
             main.innerHTML = '';
 
-            if(activeProjetoId) {
-                renderDetalhesProjeto(activeProjetoId);
-                return;
-            }
-            if(activeClienteId) {
-                renderDetalhesCliente(activeClienteId);
-                return;
-            }
+            if(activeProjetoId) { renderDetalhesProjeto(activeProjetoId); return; }
+            if(activeClienteId) { renderDetalhesCliente(activeClienteId); return; }
 
             if(currentTab === 'painel') renderPainel(main);
             else if(currentTab === 'projetos') renderProjetos(main);
+            else if(currentTab === 'pendencias') renderPendencias(main);
             else if(currentTab === 'clientes') renderClientes(main);
             else if(currentTab === 'agenda') renderAgenda(main);
             else if(currentTab === 'despesas') renderDespesas(main);
@@ -562,14 +562,13 @@
         }
 
         // -------------------------------------------------------------
-        // 1. PAINEL GERENCIAL
+        // 1. PAINEL (EXIBE PENDÊNCIAS ATIVAS)
         // -------------------------------------------------------------
         function renderPainel(container) {
             const totalProj = appData.projetos.length;
             const emExec = appData.projetos.filter(p => p.statusGeral === 'Em Execução').length;
             const pausados = appData.projetos.filter(p => p.statusGeral === 'Pausado').length;
-            const finalizados = appData.projetos.filter(p => p.statusGeral === 'Finalizado').length;
-            const totalDesp = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
+            const pendenciasAtivas = appData.pendencias.filter(x => x.status === 'Pendente');
 
             container.innerHTML = `
                 <div class="p-4 space-y-4">
@@ -582,48 +581,110 @@
                             <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-play text-emerald-400 mr-1.5"></i> Em Execução</div>
                             <div class="text-xl font-bold text-white">${emExec}</div>
                         </div>
-                        <div onclick="navigate('projetos')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
-                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-pause text-amber-400 mr-1.5"></i> Pausados</div>
-                            <div class="text-xl font-bold text-white">${pausados}</div>
+                        <div onclick="navigate('pendencias')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1.5"></i> Pendências</div>
+                            <div class="text-xl font-bold text-amber-400">${pendenciasAtivas.length}</div>
                         </div>
-                        <div onclick="navigate('despesas')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
-                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-wallet text-teal-400 mr-1.5"></i> Despesas</div>
-                            <div class="text-base font-bold text-emerald-400 mt-1">R$ ${totalDesp.toFixed(2)}</div>
+                        <div onclick="navigate('projetos')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-pause text-rose-400 mr-1.5"></i> Pausados</div>
+                            <div class="text-xl font-bold text-white">${pausados}</div>
                         </div>
                     </div>
 
+                    <!-- Pendências na Tela Inicial -->
                     <div class="space-y-2">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Alertas & Projetos Pausados</h3>
-                        ${pausados === 0 ? '<div class="bg-slate-800/40 p-3 rounded-xl text-xs text-slate-400 text-center">Nenhuma pendência crítica.</div>' : ''}
-                        ${appData.projetos.filter(p => p.statusGeral === 'Pausado').map(p => `
-                            <div onclick="abrirProjeto('${p.id}')" class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl cursor-pointer">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="text-xs font-bold text-amber-400">${p.id} - ${p.cliente}</span>
-                                    <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full">Pausado</span>
+                        <div class="flex justify-between items-center px-1">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pendências Críticas Recentes</h3>
+                            <button onclick="navigate('pendencias')" class="text-[11px] text-blue-400 font-medium">Ver todas</button>
+                        </div>
+                        ${pendenciasAtivas.length === 0 ? '<div class="bg-slate-800/40 p-3 rounded-xl text-xs text-slate-400 text-center">Nenhuma pendência ativa no momento.</div>' : ''}
+                        ${pendenciasAtivas.slice(0, 3).map(pen => {
+                            const pObj = appData.projetos.find(x => x.id === pen.projetoId);
+                            return `
+                                <div onclick="abrirProjeto('${pen.projetoId}')" class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl cursor-pointer space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs font-bold text-amber-400">${pen.projetoId} - ${pObj ? pObj.cliente : 'Obra'}</span>
+                                        <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full">Etapa ${pen.etapaId}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-300">${pen.descricao}</p>
                                 </div>
-                                <p class="text-xs text-slate-300">${p.motivoPausa}</p>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             `;
         }
 
         // -------------------------------------------------------------
-        // 2. PROJETOS (LISTA + TELA ÚNICA DETALHADA)
+        // 2. ABA PENDÊNCIAS
+        // -------------------------------------------------------------
+        function renderPendencias(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">Controle de Pendências & Erros</h2>
+                        <span class="text-[10px] text-slate-400">${appData.pendencias.length} registradas</span>
+                    </div>
+                    <div class="space-y-2">
+                        ${appData.pendencias.length === 0 ? '<p class="text-xs text-slate-500 text-center py-6">Nenhuma pendência cadastrada.</p>' : ''}
+                        ${appData.pendencias.map(pen => {
+                            const pObj = appData.projetos.find(x => x.id === pen.projetoId);
+                            const etapaNome = ETAPAS_INSTALACAO.find(e => e.id === pen.etapaId)?.nome || `Etapa ${pen.etapaId}`;
+                            const resolvida = pen.status === 'Resolvida';
+
+                            return `
+                                <div class="bg-slate-800/80 border ${resolvida ? 'border-emerald-500/30' : 'border-amber-500/40'} p-3.5 rounded-2xl space-y-2">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">${pen.projetoId}</span>
+                                            <h3 class="text-xs font-bold text-white mt-1">${pObj ? pObj.cliente : 'Obra'}</h3>
+                                        </div>
+                                        <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${resolvida ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">
+                                            ${pen.status}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-slate-300"><strong>${etapaNome}:</strong> ${pen.descricao}</p>
+                                    <div class="flex justify-between items-center pt-2 border-t border-slate-700/60 text-[10px] text-slate-400">
+                                        <span>Registrado em: ${pen.dataHora}</span>
+                                        ${!resolvida ? `
+                                            <button onclick="resolverPendencia('${pen.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded-lg font-bold">
+                                                Marcar como Resolvida
+                                            </button>
+                                        ` : '<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>Resolvido</span>'}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function resolverPendencia(penId) {
+            const pen = appData.pendencias.find(x => x.id === penId);
+            if(pen) {
+                pen.status = "Resolvida";
+                registrarLog(pen.projetoId, `Pendência da etapa ${pen.etapaId} marcada como resolvida.`);
+                salvarStorage();
+                renderCurrentView();
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 3. PROJETOS (COM BOTÃO WAZE E JANELA RECORRENTE SEPARADA)
         // -------------------------------------------------------------
         function renderProjetos(container) {
             container.innerHTML = `
                 <div class="p-4 space-y-3">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-sm font-bold text-white">Todos os Projetos</h2>
+                        <h2 class="text-sm font-bold text-white">Projetos & Obras</h2>
                         <button onclick="abrirModalNovoProjeto()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-xs font-medium flex items-center space-x-1">
                             <i class="fa-solid fa-plus"></i><span>Novo Projeto</span>
                         </button>
                     </div>
                     <div class="space-y-2.5">
                         ${appData.projetos.map(p => {
-                            const etapaNome = ETAPAS_PADRAO.find(e => e.id === p.etapaAtualId)?.nome || 'Concluído';
+                            const etapaNome = ETAPAS_INSTALACAO.find(e => e.id === p.etapaAtualId)?.nome || 'Concluído';
                             let badge = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
                             if(p.statusGeral === 'Pausado') badge = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
                             if(p.statusGeral === 'Finalizado') badge = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
@@ -638,7 +699,7 @@
                                         <span class="text-[10px] px-2 py-0.5 rounded-full border ${badge} font-medium">${p.statusGeral}</span>
                                     </div>
                                     <div class="flex justify-between items-center text-xs text-slate-400 mt-2 pt-2 border-t border-slate-700/50">
-                                        <span><i class="fa-solid fa-location-dot mr-1"></i>${p.local}</span>
+                                        <span><i class="fa-solid fa-location-dot mr-1"></i>${p.local.split(',')[0]}</span>
                                         <span class="text-slate-300 font-medium">${etapaNome}</span>
                                     </div>
                                 </div>
@@ -661,68 +722,69 @@
             const despesasProj = appData.despesas.filter(d => d.projetoId === id);
             const totalDespProj = despesasProj.reduce((acc, d) => acc + d.valor, 0);
 
-            const etapasConcluidas = ETAPAS_PADRAO.filter(e => e.id < p.etapaAtualId);
-            const etapaAtualObj = ETAPAS_PADRAO.find(e => e.id === p.etapaAtualId);
-            const etapasFuturas = ETAPAS_PADRAO.filter(e => e.id > p.etapaAtualId);
-
-            const stateAtual = p.etapasState[p.etapaAtualId] || { status: 'Aguardando', respostas: Array(10).fill(""), logs: [] };
+            const etapasConcluidas = ETAPAS_INSTALACAO.filter(e => e.id < p.etapaAtualId);
+            const etapaAtualObj = ETAPAS_INSTALACAO.find(e => e.id === p.etapaAtualId);
+            const etapasFuturas = ETAPAS_INSTALACAO.filter(e => e.id > p.etapaAtualId);
+            const stateAtual = p.etapasState[p.etapaAtualId] || { status: 'Aguardando', respostas: Array(10).fill(""), horaFim: "", fotos: [] };
 
             container.innerHTML = `
                 <div class="p-4 space-y-4">
-                    <!-- Topo: Voltar e Ações Rápidas -->
+                    <!-- Topo: Voltar e Ações -->
                     <div class="flex justify-between items-center">
                         <button onclick="navigate('projetos')" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs border border-slate-700">
                             <i class="fa-solid fa-arrow-left mr-1"></i> Voltar
                         </button>
                         <div class="flex space-x-1.5">
-                            <button onclick="abrirEtiqueta('${p.id}')" title="Imprimir Etiqueta" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1.5 rounded-xl text-xs border border-slate-700">
-                                <i class="fa-solid fa-tag mr-1"></i> Etiqueta
+                            <button onclick="abrirEtiqueta('${p.id}')" class="bg-slate-800 text-amber-400 px-2.5 py-1.5 rounded-xl text-xs border border-slate-700">
+                                <i class="fa-solid fa-tag"></i>
                             </button>
-                            <button onclick="abrirModalDespesa(null, '${p.id}')" title="Adicionar Despesa" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2.5 py-1.5 rounded-xl text-xs border border-slate-700">
-                                <i class="fa-solid fa-plus mr-1"></i> Despesa
+                            <button onclick="abrirModalDespesa(null, '${p.id}')" class="bg-slate-800 text-emerald-400 px-2.5 py-1.5 rounded-xl text-xs border border-slate-700">
+                                <i class="fa-solid fa-plus"></i> Desp.
                             </button>
                         </div>
                     </div>
 
-                    <!-- Card Dados do Projeto -->
-                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
+                    <!-- Card Dados & Botão Waze + Iniciar Obra -->
+                    <div class="bg-slate-800/90 border border-slate-700 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h2 class="text-base font-bold text-white">${p.cliente}</h2>
                                 <p class="text-xs text-slate-400 mt-0.5">${p.servico} • ${p.equipamento}</p>
-                                <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${p.local}</p>
+                                <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1 text-blue-400"></i>${p.local}</p>
                             </div>
                             <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
                                 R$ ${totalDespProj.toFixed(2)}
                             </span>
                         </div>
+
+                        <!-- Botões de Campo: Iniciar Rota Waze + Controle de Tempo na Obra -->
+                        <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-700/60">
+                            <button onclick="iniciarRotaWaze('${p.local}')" class="bg-teal-600 hover:bg-teal-500 text-white py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition">
+                                <i class="fa-brands fa-waze text-sm"></i><span>Iniciar Rota</span>
+                            </button>
+                            ${!p.emObraAtiva ? `
+                                <button onclick="abrirModalTempoObra('${p.id}', 'iniciar')" class="bg-blue-600 hover:bg-blue-500 text-white py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition">
+                                    <i class="fa-solid fa-business-time"></i><span>Iniciar na Obra</span>
+                                </button>
+                            ` : `
+                                <button onclick="abrirModalTempoObra('${p.id}', 'encerrar')" class="bg-rose-600 hover:bg-rose-500 text-white py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition animate-pulse">
+                                    <i class="fa-solid fa-stopwatch"></i><span>Encerrar na Obra</span>
+                                </button>
+                            `}
+                        </div>
                     </div>
 
-                    <!-- Seção de Arquivos do Projeto + Botão Adicionar -->
-                    <div class="bg-slate-800/50 border border-slate-700/60 p-3.5 rounded-2xl space-y-2.5">
+                    <!-- Arquivos Anexados -->
+                    <div class="bg-slate-800/50 border border-slate-700 p-3.5 rounded-2xl space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-paperclip text-blue-400 mr-1.5"></i>Arquivos & Manuais (${(p.arquivos || []).length})</span>
-                            <button onclick="document.getElementById('modal-arquivo').classList.remove('hidden')" class="bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-2.5 py-1 rounded-lg text-[11px] font-medium border border-blue-500/30">
-                                <i class="fa-solid fa-upload mr-1"></i> Adicionar Arquivo
+                            <button onclick="document.getElementById('modal-arquivo').classList.remove('hidden')" class="bg-blue-600/20 text-blue-400 px-2.5 py-1 rounded-lg text-[11px] font-medium border border-blue-500/30">
+                                <i class="fa-solid fa-upload mr-1"></i> Anexar
                             </button>
-                        </div>
-                        <div class="space-y-1.5">
-                            ${(p.arquivos || []).map(arq => `
-                                <div onclick="alert('Abrindo visualização do documento: ${arq.nome}')" class="bg-slate-900/80 p-2.5 rounded-xl flex justify-between items-center cursor-pointer hover:bg-slate-900 border border-slate-800">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fa-solid fa-file-pdf text-rose-400 text-sm"></i>
-                                        <div>
-                                            <p class="text-xs font-medium text-slate-200">${arq.nome}</p>
-                                            <p class="text-[10px] text-slate-500">${arq.tipo} • ${arq.data}</p>
-                                        </div>
-                                    </div>
-                                    <i class="fa-solid fa-eye text-slate-400 text-xs"></i>
-                                </div>
-                            `).join('')}
                         </div>
                     </div>
 
-                    <!-- ETAPAS CONCLUÍDAS (JANELA RETRÁTIL) -->
+                    <!-- ETAPAS CONCLUÍDAS -->
                     ${etapasConcluidas.length > 0 ? `
                         <details class="bg-slate-800/40 border border-emerald-500/20 rounded-2xl overflow-hidden">
                             <summary class="p-3.5 text-xs font-bold text-emerald-400 cursor-pointer flex justify-between items-center">
@@ -733,40 +795,34 @@
                                 ${etapasConcluidas.map(e => `
                                     <div class="flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl text-xs text-slate-300">
                                         <span>${e.nome}</span>
-                                        <span class="text-[10px] text-emerald-400 font-semibold">10/10 OK</span>
+                                        <span class="text-[10px] text-emerald-400 font-semibold">10/10 OK (${p.etapasState[e.id]?.horaFim || '-'})</span>
                                     </div>
                                 `).join('')}
                             </div>
                         </details>
                     ` : ''}
 
-                    <!-- ETAPA ATUAL EM DESTAQUE -->
+                    <!-- ETAPA ATUAL EM DESTAQUE (COM ERRO/PROBLEMA NO LUGAR DE INICIAR) -->
                     ${etapaAtualObj && p.statusGeral !== 'Finalizado' ? `
                         <div class="bg-slate-800 border-2 ${p.statusGeral === 'Pausado' ? 'border-amber-500/60' : 'border-blue-500/60'} rounded-2xl p-4 space-y-3 shadow-lg">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-white">${etapaAtualObj.nome}</span>
                                 <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${p.statusGeral === 'Pausado' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">
-                                    ${p.emTrabalho ? 'Em Trabalho Ativo' : p.statusGeral}
+                                    ${p.statusGeral}
                                 </span>
                             </div>
 
                             ${p.motivoPausa ? `<p class="text-xs text-amber-300 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${p.motivoPausa}</p>` : ''}
 
                             <div class="text-xs text-slate-400 flex justify-between items-center">
-                                <span>Progresso Questionário:</span>
+                                <span>Progresso Questionário & Fotos:</span>
                                 <span class="text-blue-400 font-bold">${stateAtual.respostas.filter(r=>r).length}/10 itens</span>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2 pt-1">
-                                ${!p.emTrabalho ? `
-                                    <button onclick="alternarTrabalho('${p.id}', ${etapaAtualObj.id}, true)" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
-                                        <i class="fa-solid fa-play mr-1"></i> Iniciar Tarefa
-                                    </button>
-                                ` : `
-                                    <button onclick="alternarTrabalho('${p.id}', ${etapaAtualObj.id}, false)" class="bg-rose-600 hover:bg-rose-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
-                                        <i class="fa-solid fa-stop mr-1"></i> Parar Tarefa
-                                    </button>
-                                `}
+                                <button onclick="abrirModalErroEtapa('${p.id}', ${etapaAtualObj.id})" class="bg-amber-600 hover:bg-amber-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
+                                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Erro / Problema
+                                </button>
                                 <button onclick="abrirQuestionario('${p.id}', ${etapaAtualObj.id})" class="bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
                                     <i class="fa-solid fa-list-check mr-1"></i> Questionário
                                 </button>
@@ -774,7 +830,7 @@
                         </div>
                     ` : ''}
 
-                    <!-- ETAPAS FUTURAS (DESATIVADAS E AGRUPADAS EM JANELA RETRÁTIL) -->
+                    <!-- ETAPAS FUTURAS BLOQUEADAS -->
                     ${etapasFuturas.length > 0 ? `
                         <details class="bg-slate-900/70 border border-slate-800 rounded-2xl overflow-hidden">
                             <summary class="p-3.5 text-xs font-bold text-slate-400 cursor-pointer flex justify-between items-center">
@@ -783,7 +839,7 @@
                             </summary>
                             <div class="p-3 pt-0 space-y-1.5 border-t border-slate-800/80 opacity-60">
                                 ${etapasFuturas.map(e => `
-                                    <div class="flex justify-between items-center bg-slate-950/60 p-2.5 rounded-xl text-xs text-slate-500 cursor-not-allowed">
+                                    <div class="flex justify-between items-center bg-slate-950/60 p-2.5 rounded-xl text-xs text-slate-500">
                                         <span>${e.nome}</span>
                                         <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded">Aguardando anterior</span>
                                     </div>
@@ -791,46 +847,121 @@
                             </div>
                         </details>
                     ` : ''}
+
+                    <!-- JANELA RETRÁTIL SEPARADA PARA VISTORIAS E MANUTENÇÕES (RECORRENTES / TERCEIRIZADAS) -->
+                    <details class="bg-slate-800/70 border border-purple-500/30 rounded-2xl overflow-hidden">
+                        <summary class="p-3.5 text-xs font-bold text-purple-400 cursor-pointer flex justify-between items-center bg-slate-800">
+                            <span><i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> Vistorias & Manutenções (Recorrentes)</span>
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </summary>
+                        <div class="p-3 space-y-2 border-t border-slate-700">
+                            ${TAREFAS_RECORRENTES.map(rec => {
+                                const recState = (p.recorrentesState || {})[rec.id] || { status: 'Pendente', agendadoPara: 'Não agendado' };
+                                return `
+                                    <div class="bg-slate-900/80 p-3 rounded-xl flex justify-between items-center border border-slate-800">
+                                        <div>
+                                            <p class="text-xs font-bold text-white">${rec.nome}</p>
+                                            <p class="text-[10px] text-slate-400">Agendado: ${recState.agendadoPara}</p>
+                                        </div>
+                                        <button onclick="abrirQuestionario('${p.id}', ${rec.id})" class="bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold">
+                                            Executar
+                                        </button>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </details>
                 </div>
             `;
         }
 
-        // Lógica Iniciar / Parar Tarefa (Abre formulário ao parar)
-        function alternarTrabalho(projetoId, etapaId, iniciar) {
-            const p = appData.projetos.find(x => x.id === projetoId);
-            if(!p.etapasState[etapaId]) {
-                p.etapasState[etapaId] = { status: "Em Execução", respostas: Array(10).fill(""), logs: [] };
-            }
-            const hora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            if(iniciar) {
-                p.emTrabalho = true;
-                p.statusGeral = "Em Execução";
-                p.etapasState[etapaId].logs.push({ inicio: hora, fim: "" });
-                registrarLog(projetoId, `Tarefa iniciada na etapa ${etapaId} às ${hora}.`);
-                salvarStorage();
-                renderDetalhesProjeto(projetoId);
-            } else {
-                p.emTrabalho = false;
-                const logs = p.etapasState[etapaId].logs;
-                if(logs.length > 0) logs[logs.length - 1].fim = hora;
-                registrarLog(projetoId, `Tarefa pausada/parada na etapa ${etapaId} às ${hora}.`);
-                salvarStorage();
-                renderDetalhesProjeto(projetoId);
-                // Abre automaticamente o questionário para atualizar o status
-                abrirQuestionario(projetoId, etapaId);
-            }
+        // Abrir Waze com endereço do projeto
+        function iniciarRotaWaze(endereco) {
+            const urlWaze = `https://waze.com/ul?q=${encodeURIComponent(endereco)}&navigate=yes`;
+            window.open(urlWaze, '_blank');
+            registrarLog("Waze", `Iniciada rota de navegação para: ${endereco}`);
         }
 
-        // QUESTIONÁRIO COM BOTÕES DE RÁDIO E SALVAMENTO INTELIGENTE
+        // Controle de Tempo na Obra (Botão Iniciar/Encerrar Obra)
+        function abrirModalTempoObra(projetoId, acao) {
+            activeProjetoId = projetoId;
+            acaoObraTemp = acao;
+            document.getElementById('modal-obra-titulo').innerText = acao === 'iniciar' ? "Iniciar Tempo na Obra" : "Encerrar Tempo na Obra";
+            document.getElementById('modal-obra-desc').innerText = acao === 'iniciar' ? "Envie uma foto do estado inicial da obra para iniciar o cronômetro de campo." : "Envie uma foto de como a obra foi deixada para encerrar o atendimento.";
+            document.getElementById('btn-submit-obra').innerText = acao === 'iniciar' ? "Confirmar Início" : "Confirmar Encerramento";
+            document.getElementById('obra-foto').value = "";
+            document.getElementById('modal-tempo-obra').classList.remove('hidden');
+        }
+
+        function salvarTempoObra(e) {
+            e.preventDefault();
+            const p = appData.projetos.find(x => x.id === activeProjetoId);
+            const hora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if(acaoObraTemp === 'iniciar') {
+                p.emObraAtiva = true;
+                registrarLog(p.id, `Equipe iniciou presença na obra às ${hora} (com foto de comprovação).`);
+                alert("Presença na obra iniciada com sucesso!");
+            } else {
+                p.emObraAtiva = false;
+                registrarLog(p.id, `Equipe encerrou atendimento na obra às ${hora} (com foto de conclusão).`);
+                alert("Atendimento na obra encerrado e registrado!");
+            }
+
+            salvarStorage();
+            fecharModal('modal-tempo-obra');
+            renderDetalhesProjeto(activeProjetoId);
+        }
+
+        // ERRO / PROBLEMA EM ETAPA (EXIGE FOTO E GERA PENDÊNCIA)
+        function abrirModalErroEtapa(projetoId, etapaId) {
+            activeProjetoId = projetoId;
+            activeEtapaId = etapaId;
+            document.getElementById('err-descricao').value = "";
+            document.getElementById('err-foto').value = "";
+            document.getElementById('modal-erro-etapa').classList.remove('hidden');
+        }
+
+        function salvarErroEtapa(e) {
+            e.preventDefault();
+            const p = appData.projetos.find(x => x.id === activeProjetoId);
+            const descricao = document.getElementById('err-descricao').value;
+
+            p.statusGeral = "Pausado";
+            p.motivoPausa = descricao;
+            if(p.etapasState[activeEtapaId]) {
+                p.etapasState[activeEtapaId].status = "Pausado";
+            }
+
+            // Criar Pendência Oficial
+            const novaPenId = `PEN-00${appData.pendencias.length + 1}`;
+            const agora = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            appData.pendencias.unshift({
+                id: novaPenId,
+                projetoId: p.id,
+                etapaId: activeEtapaId,
+                descricao,
+                dataHora: agora,
+                status: "Pendente"
+            });
+
+            registrarLog(p.id, `Erro relatado na etapa ${activeEtapaId}: ${descricao} (Obra pausada).`);
+            salvarStorage();
+            fecharModal('modal-erro-etapa');
+            renderDetalhesProjeto(activeProjetoId);
+            alert("Erro registrado! A obra foi pausada e a pendência gerada.");
+        }
+
+        // QUESTIONÁRIO COM FOTO OBRIGATÓRIA E HORA DE FIM
         function abrirQuestionario(projetoId, etapaId) {
             activeProjetoId = projetoId;
             activeEtapaId = etapaId;
             const p = appData.projetos.find(x => x.id === projetoId);
-            const etapa = ETAPAS_PADRAO.find(e => e.id === etapaId);
+            const etapaObj = ETAPAS_INSTALACAO.find(e => e.id === etapaId) || TAREFAS_RECORRENTES.find(e => e.id === etapaId);
             const state = p.etapasState[etapaId] || { respostas: Array(10).fill("") };
 
-            document.getElementById('q-titulo-etapa').innerText = `${p.id} - ${etapa.nome}`;
+            document.getElementById('q-titulo-etapa').innerText = `${p.id} - ${etapaObj ? etapaObj.nome : 'Tarefa'}`;
+            document.getElementById('q-foto-evidencia').value = "";
             const container = document.getElementById('q-container-perguntas');
 
             container.innerHTML = PERGUNTAS_BASE.map((pergunta, idx) => {
@@ -841,15 +972,15 @@
                         <div class="grid grid-cols-3 gap-1.5 pt-1">
                             <div>
                                 <input type="radio" name="q-${idx}" id="q-${idx}-sim" value="Sim" class="hidden radio-btn" ${resp === 'Sim' ? 'checked' : ''}>
-                                <label for="q-${idx}-sim" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer transition">Sim</label>
+                                <label for="q-${idx}-sim" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer">Sim</label>
                             </div>
                             <div>
                                 <input type="radio" name="q-${idx}" id="q-${idx}-nao" value="Não" class="hidden radio-btn-no" ${resp === 'Não' ? 'checked' : ''}>
-                                <label for="q-${idx}-nao" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer transition">Não</label>
+                                <label for="q-${idx}-nao" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer">Não</label>
                             </div>
                             <div>
                                 <input type="radio" name="q-${idx}" id="q-${idx}-na" value="N/A" class="hidden radio-btn-na" ${resp === 'N/A' ? 'checked' : ''}>
-                                <label for="q-${idx}-na" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer transition">N/A</label>
+                                <label for="q-${idx}-na" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer">N/A</label>
                             </div>
                         </div>
                     </div>
@@ -860,9 +991,15 @@
         }
 
         function processarFormularioEtapa() {
+            const fotoInput = document.getElementById('q-foto-evidencia');
+            if(!fotoInput.files || fotoInput.files.length === 0) {
+                alert("Atenção: É obrigatório enviar uma foto de evidência visual da obra para concluir a etapa.");
+                return;
+            }
+
             const p = appData.projetos.find(x => x.id === activeProjetoId);
             if(!p.etapasState[activeEtapaId]) {
-                p.etapasState[activeEtapaId] = { status: "Em Execução", respostas: [], logs: [] };
+                p.etapasState[activeEtapaId] = { status: "Em Execução", respostas: [], horaFim: "", fotos: [] };
             }
 
             let respostas = [];
@@ -878,35 +1015,43 @@
             }
 
             p.etapasState[activeEtapaId].respostas = respostas;
+            const horaAtual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            p.etapasState[activeEtapaId].horaFim = horaAtual;
+            p.etapasState[activeEtapaId].fotos.push(fotoInput.files[0].name);
 
             if(temNao) {
-                const motivo = prompt("Você marcou 'Não' em um ou mais itens. Descreva o problema / motivo da pausa:");
+                const motivo = prompt("Há respostas 'Não'. Descreva o problema / pendência:");
                 p.statusGeral = "Pausado";
-                p.emTrabalho = false;
-                p.motivoPausa = motivo || "Pendência apontada no questionário.";
+                p.motivoPausa = motivo || "Pendência em formulário.";
                 p.etapasState[activeEtapaId].status = "Pausado";
-                registrarLog(p.id, `Etapa ${activeEtapaId} pausada: ${p.motivoPausa}`);
-                alert("Progresso salvo! Como há pendências ('Não'), o projeto entrou em PAUSA.");
+
+                appData.pendencias.unshift({
+                    id: `PEN-00${appData.pendencias.length+1}`,
+                    projetoId: p.id,
+                    etapaId: activeEtapaId,
+                    descricao: motivo || "Pendência apontada no questionário",
+                    dataHora: new Date().toLocaleDateString('pt-BR') + ' ' + horaAtual,
+                    status: "Pendente"
+                });
+
+                registrarLog(p.id, `Questionário etapa ${activeEtapaId} finalizado com pendência às ${horaAtual}.`);
+                alert("Progresso salvo. Projeto pausado devido a pendência.");
             } else if(!temVazio) {
-                // Todas as 10 perguntas respondidas sem "Não" -> Conclui automaticamente!
                 p.etapasState[activeEtapaId].status = "Finalizado";
-                p.emTrabalho = false;
                 p.motivoPausa = "";
-                if(activeEtapaId < 10) {
+                if(activeEtapaId < 8) {
                     p.etapaAtualId = activeEtapaId + 1;
                     p.statusGeral = "Em Execução";
-                    registrarLog(p.id, `Etapa ${activeEtapaId} concluída! Etapa ${p.etapaAtualId} liberada.`);
-                    alert("Tudo certo! Todas as 10 perguntas foram validadas e a etapa foi CONCLUÍDA automaticamente.");
+                    registrarLog(p.id, `Etapa ${activeEtapaId} concluída às ${horaAtual}! Etapa ${p.etapaAtualId} liberada.`);
+                    alert(`Etapa concluída às ${horaAtual}! Próxima fase liberada.`);
                 } else {
                     p.statusGeral = "Finalizado";
-                    registrarLog(p.id, `Projeto finalizado com sucesso!`);
-                    alert("Projeto 100% concluído!");
+                    registrarLog(p.id, `Projeto concluído com sucesso às ${horaAtual}!`);
+                    alert("Projeto 100% Finalizado!");
                 }
             } else {
-                // Parcial sem problemas
-                p.statusGeral = "Em Execução";
-                registrarLog(p.id, `Progresso parcial salvo na etapa ${activeEtapaId} (${respostas.filter(r=>r).length}/10).`);
-                alert("Progresso parcial salvo! Responda os itens restantes para concluir a etapa.");
+                registrarLog(p.id, `Progresso parcial salvo na etapa ${activeEtapaId} às ${horaAtual}.`);
+                alert("Progresso parcial salvo!");
             }
 
             salvarStorage();
@@ -914,48 +1059,131 @@
             renderDetalhesProjeto(activeProjetoId);
         }
 
-        // ANEXAR ARQUIVOS
-        function salvarArquivoProjeto(e) {
-            e.preventDefault();
-            const p = appData.projetos.find(x => x.id === activeProjetoId);
-            const nome = document.getElementById('arq-nome').value;
-            const tipo = document.getElementById('arq-tipo').value;
-            if(!p.arquivos) p.arquivos = [];
-            p.arquivos.push({ nome, tipo, data: new Date().toLocaleDateString('pt-BR') });
-            registrarLog(p.id, `Arquivo "${nome}" anexado ao projeto.`);
-            salvarStorage();
-            fecharModal('modal-arquivo');
-            renderDetalhesProjeto(activeProjetoId);
-        }
-
-        // IMPRIMIR ETIQUETA
-        function abrirEtiqueta(projetoId) {
-            const p = appData.projetos.find(x => x.id === projetoId);
-            document.getElementById('etiqueta-preview').innerHTML = `
-                <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-center">
-                    <span class="font-black text-sm">OPERACIONAL PRO</span>
-                    <span class="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">${p.id}</span>
-                </div>
-                <div class="py-1">
-                    <p class="text-[10px] uppercase text-slate-500 font-bold">Cliente / Destinatário</p>
-                    <p class="text-sm font-black">${p.cliente}</p>
-                </div>
-                <div class="grid grid-cols-2 gap-2 text-xs border-t border-slate-300 pt-2">
-                    <div>
-                        <p class="text-[10px] text-slate-500 font-bold">Equipamento</p>
-                        <p class="font-bold">${p.equipamento}</p>
+        // OUTRAS FUNÇÕES AUXILIARES (CLIENTES, AGENDA, DESPESAS, LOGS, ETC)
+        function renderClientes(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">Clientes Cadastrados</h2>
+                        <button onclick="abrirModalCliente()" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Novo Cliente</button>
                     </div>
-                    <div>
-                        <p class="text-[10px] text-slate-500 font-bold">Serviço</p>
-                        <p class="font-bold">${p.servico}</p>
+                    <div class="space-y-2">
+                        ${appData.clientes.map(c => `
+                            <div onclick="abrirCliente('${c.id}')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] font-bold text-purple-400">${c.id}</span>
+                                    <h3 class="text-sm font-bold text-white">${c.nome}</h3>
+                                    <p class="text-xs text-slate-400">${c.tel} • ${c.cidade}</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
+                            </div>
+                        `).join('')}
                     </div>
-                </div>
-                <div class="text-[10px] text-slate-600 pt-1">
-                    <strong>Local:</strong> ${p.local}
                 </div>
             `;
-            registrarLog(p.id, "Visualizada etiqueta de identificação para impressão.");
-            document.getElementById('modal-etiqueta').classList.remove('hidden');
+        }
+
+        function abrirCliente(id) { activeClienteId = id; renderCurrentView(); }
+        function renderDetalhesCliente(id) {
+            const c = appData.clientes.find(x => x.id === id);
+            const container = document.getElementById('main-content');
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <button onclick="navigate('clientes')" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs"><i class="fa-solid fa-arrow-left mr-1"></i> Voltar</button>
+                    <div class="bg-slate-800 p-4 rounded-2xl space-y-1">
+                        <h2 class="text-base font-bold text-white">${c.nome}</h2>
+                        <p class="text-xs text-slate-300">${c.tel} • ${c.cidade}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function abrirModalCliente() { document.getElementById('modal-cliente').classList.remove('hidden'); }
+        function salvarCliente(e) {
+            e.preventDefault();
+            const nome = document.getElementById('cli-nome').value;
+            const tel = document.getElementById('cli-tel').value;
+            const cidade = document.getElementById('cli-cidade').value;
+            appData.clientes.push({ id: `CLI-00${appData.clientes.length+1}`, nome, tel, cidade });
+            salvarStorage(); fecharModal('modal-cliente'); renderCurrentView();
+        }
+
+        function renderAgenda(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">Agenda Operacional</h2>
+                        <button onclick="document.getElementById('modal-evento').classList.remove('hidden')" class="bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="space-y-2">
+                        ${appData.agenda.map(ev => `
+                            <div class="bg-slate-800 p-3 rounded-xl flex justify-between items-center text-xs">
+                                <div><span class="text-blue-400 font-bold">${ev.data}</span> - <strong>${ev.titulo}</strong></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function salvarEvento(e) {
+            e.preventDefault();
+            const data = document.getElementById('ev-data').value;
+            const projetoId = document.getElementById('ev-projeto').value;
+            const titulo = document.getElementById('ev-titulo').value;
+            appData.agenda.push({ id: `EV-00${appData.agenda.length+1}`, data, projetoId, titulo });
+            salvarStorage(); fecharModal('modal-evento'); renderCurrentView();
+        }
+
+        function renderDespesas(container) {
+            const totalGeral = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="bg-slate-800 p-3.5 rounded-2xl flex justify-between items-center">
+                        <div><p class="text-xs text-slate-400">Total Despesas</p><p class="text-lg font-bold text-emerald-400">R$ ${totalGeral.toFixed(2)}</p></div>
+                        <button onclick="abrirModalDespesa()" class="bg-emerald-600 text-white px-3 py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="space-y-2">
+                        ${appData.despesas.map(d => `
+                            <div class="bg-slate-800 p-3 rounded-xl flex justify-between items-center text-xs">
+                                <div><strong>${d.categoria}</strong> - ${d.obs}</div>
+                                <span class="text-emerald-400 font-bold">R$ ${d.valor.toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function abrirModalDespesa(editId=null, preProj=null) {
+            const sel = document.getElementById('desp-projeto');
+            sel.innerHTML = `<option value="EXTRA">Despesa Extra</option>` + appData.projetos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente}</option>`).join('');
+            if(preProj) sel.value = preProj;
+            document.getElementById('modal-despesa').classList.remove('hidden');
+        }
+
+        function salvarDespesa(e) {
+            e.preventDefault();
+            const projetoId = document.getElementById('desp-projeto').value;
+            const categoria = document.getElementById('desp-cat').value;
+            const valor = parseFloat(document.getElementById('desp-valor').value);
+            const obs = document.getElementById('desp-obs').value;
+            appData.despesas.push({ id: `DSP-00${appData.despesas.length+1}`, projetoId, data: '12/11/2026', categoria, valor, obs });
+            salvarStorage(); fecharModal('modal-despesa'); renderCurrentView();
+        }
+
+        function renderLogs(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-2">
+                    <h2 class="text-sm font-bold text-white mb-2">Logs de Atividade</h2>
+                    ${appData.logs.map(l => `
+                        <div class="bg-slate-800 p-2.5 rounded-xl text-xs">
+                            <span class="text-blue-400 font-bold">[${l.acao}]</span> <span class="text-slate-300">${l.detalhe}</span>
+                            <div class="text-[9px] text-slate-500 text-right mt-1">${l.dataHora}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         }
 
         function abrirModalNovoProjeto() {
@@ -974,350 +1202,42 @@
             const novoId = `PRJ-00${appData.projetos.length + 1}`;
 
             appData.projetos.push({
-                id: novoId,
-                clienteId: cliId,
-                cliente: cliObj ? cliObj.nome : "Cliente",
-                local, servico, equipamento,
-                etapaAtualId: 2,
-                statusGeral: "Em Execução",
-                motivoPausa: "",
-                emTrabalho: false,
-                arquivos: [],
-                etapasState: {
-                    1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:10"}] }
-                }
+                id: novoId, clienteId: cliId, cliente: cliObj ? cliObj.nome : "Cliente",
+                local, servico, equipamento, etapaAtualId: 2, statusGeral: "Em Execução",
+                motivoPausa: "", emObraAtiva: false, arquivos: [],
+                etapasState: { 1: { status: "Finalizado", respostas: Array(10).fill("Sim"), horaFim: "08:10", fotos: [] } },
+                recorrentesState: { 9: { status: "Pendente", agendadoPara: "A definir", fotos: [] }, 10: { status: "Pendente", agendadoPara: "A definir", fotos: [] } }
             });
-
-            registrarLog(novoId, `Novo projeto criado para ${cliObj.nome}. Venda concluída.`);
-            salvarStorage();
-            fecharModal('modal-projeto');
-            navigate('projetos');
+            salvarStorage(); fecharModal('modal-projeto'); navigate('projetos');
         }
 
-        // -------------------------------------------------------------
-        // 3. CLIENTES (LISTA, CADASTRO, EDIÇÃO & TELA ÚNICA)
-        // -------------------------------------------------------------
-        function renderClientes(container) {
-            container.innerHTML = `
-                <div class="p-4 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-sm font-bold text-white">Clientes Cadastrados</h2>
-                        <button onclick="abrirModalCliente()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-xs font-medium">
-                            <i class="fa-solid fa-plus mr-1"></i> Novo Cliente
-                        </button>
-                    </div>
-                    <div class="space-y-2">
-                        ${appData.clientes.map(c => `
-                            <div onclick="abrirCliente('${c.id}')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer hover:border-blue-500/50 transition flex justify-between items-center">
-                                <div>
-                                    <span class="text-[10px] font-bold text-purple-400">${c.id}</span>
-                                    <h3 class="text-sm font-bold text-white">${c.nome}</h3>
-                                    <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-phone mr-1"></i>${c.tel} • ${c.cidade}</p>
-                                </div>
-                                <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
-                            </div>
-                        `).join('')}
-                    </div>
+        function abrirEtiqueta(projetoId) {
+            const p = appData.projetos.find(x => x.id === projetoId);
+            document.getElementById('etiqueta-preview').innerHTML = `
+                <div class="border-b-2 border-slate-900 pb-2 flex justify-between">
+                    <span class="font-black text-xs">OPERACIONAL PRO</span>
+                    <span class="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">${p.id}</span>
                 </div>
-            `;
-        }
-
-        function abrirCliente(id) {
-            activeClienteId = id;
-            document.getElementById('header-title').innerText = `Cliente ${id}`;
-            renderCurrentView();
-        }
-
-        function renderDetalhesCliente(id) {
-            const c = appData.clientes.find(x => x.id === id);
-            const projsCliente = appData.projetos.filter(p => p.clienteId === id || p.cliente === c.nome);
-            const container = document.getElementById('main-content');
-
-            container.innerHTML = `
-                <div class="p-4 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <button onclick="navigate('clientes')" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs border border-slate-700">
-                            <i class="fa-solid fa-arrow-left mr-1"></i> Voltar
-                        </button>
-                        <button onclick="abrirModalCliente('${c.id}')" class="bg-blue-600/20 text-blue-400 px-3 py-1.5 rounded-xl text-xs border border-blue-500/30 font-medium">
-                            <i class="fa-solid fa-pen mr-1"></i> Editar Dados
-                        </button>
-                    </div>
-
-                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl space-y-1">
-                        <span class="text-[10px] font-bold text-purple-400">${c.id}</span>
-                        <h2 class="text-base font-bold text-white">${c.nome}</h2>
-                        <p class="text-xs text-slate-300"><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i>${c.tel}</p>
-                        <p class="text-xs text-slate-300"><i class="fa-solid fa-location-dot mr-1.5 text-slate-400"></i>${c.cidade}</p>
-                    </div>
-
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projetos deste Cliente (${projsCliente.length})</h3>
-                        ${projsCliente.length === 0 ? '<p class="text-xs text-slate-500">Nenhum projeto registrado.</p>' : ''}
-                        ${projsCliente.map(p => `
-                            <div onclick="abrirProjeto('${p.id}')" class="bg-slate-800/60 border border-slate-700 p-3 rounded-xl cursor-pointer flex justify-between items-center">
-                                <div>
-                                    <span class="text-xs font-bold text-blue-400">${p.id}</span> - <span class="text-xs text-white font-medium">${p.servico}</span>
-                                    <p class="text-[11px] text-slate-400">${p.equipamento}</p>
-                                </div>
-                                <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-200">${p.statusGeral}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                <div class="py-1">
+                    <p class="text-[9px] uppercase text-slate-500 font-bold">Cliente</p>
+                    <p class="text-xs font-black">${p.cliente}</p>
                 </div>
+                <div class="text-[9px] text-slate-700"><strong>Equip:</strong> ${p.equipamento}</div>
+                <div class="text-[9px] text-slate-700"><strong>Local:</strong> ${p.local}</div>
             `;
+            document.getElementById('modal-etiqueta').classList.remove('hidden');
         }
 
-        function abrirModalCliente(editId = null) {
-            document.getElementById('cli-edit-id').value = editId || '';
-            if(editId) {
-                const c = appData.clientes.find(x => x.id === editId);
-                document.getElementById('modal-cli-titulo').innerText = "Editar Cliente";
-                document.getElementById('cli-nome').value = c.nome;
-                document.getElementById('cli-tel').value = c.tel;
-                document.getElementById('cli-cidade').value = c.cidade;
-            } else {
-                document.getElementById('modal-cli-titulo').innerText = "Novo Cliente";
-                document.getElementById('cli-nome').value = '';
-                document.getElementById('cli-tel').value = '';
-                document.getElementById('cli-cidade').value = '';
-            }
-            document.getElementById('modal-cliente').classList.remove('hidden');
-        }
-
-        function salvarCliente(e) {
+        function salvarArquivoProjeto(e) {
             e.preventDefault();
-            const editId = document.getElementById('cli-edit-id').value;
-            const nome = document.getElementById('cli-nome').value;
-            const tel = document.getElementById('cli-tel').value;
-            const cidade = document.getElementById('cli-cidade').value;
-
-            if(editId) {
-                const c = appData.clientes.find(x => x.id === editId);
-                c.nome = nome; c.tel = tel; c.cidade = cidade;
-                registrarLog(editId, `Dados do cliente ${nome} atualizados.`);
-            } else {
-                const novoId = `CLI-00${appData.clientes.length + 1}`;
-                appData.clientes.push({ id: novoId, nome, tel, cidade });
-                registrarLog(novoId, `Novo cliente cadastrado: ${nome}.`);
-            }
-            salvarStorage();
-            fecharModal('modal-cliente');
-            renderCurrentView();
+            const p = appData.projetos.find(x => x.id === activeProjetoId);
+            const nome = document.getElementById('arq-nome').value;
+            const tipo = document.getElementById('arq-tipo').value;
+            if(!p.arquivos) p.arquivos = [];
+            p.arquivos.push({ nome, tipo, data: '12/11/2026' });
+            salvarStorage(); fecharModal('modal-arquivo'); renderDetalhesProjeto(activeProjetoId);
         }
 
-        // -------------------------------------------------------------
-        // 4. AGENDA MENSAL E COMPROMISSOS
-        // -------------------------------------------------------------
-        function renderAgenda(container) {
-            const ano = mesAgendaAtual.getFullYear();
-            const mes = mesAgendaAtual.getMonth();
-            const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-            const primeiroDia = new Date(ano, mes, 1).getDay();
-            const diasNoMes = new Date(ano, mes + 1, 0).getDate();
-
-            let diasHtml = '';
-            for(let i=0; i<primeiroDia; i++) diasHtml += `<div></div>`;
-            for(let d=1; d<=diasNoMes; d++) {
-                const dataStr = `${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                const temEvento = appData.agenda.some(ev => ev.data === dataStr);
-                diasHtml += `
-                    <div class="p-1.5 text-center rounded-xl text-xs font-medium ${temEvento ? 'bg-blue-600 text-white font-bold shadow' : 'text-slate-300 bg-slate-800/50'}">
-                        ${d}
-                    </div>
-                `;
-            }
-
-            container.innerHTML = `
-                <div class="p-4 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-sm font-bold text-white">${nomesMeses[mes]} ${ano}</h2>
-                        <div class="flex space-x-1">
-                            <button onclick="mudarMes(-1)" class="bg-slate-800 px-2.5 py-1 rounded-lg text-xs text-slate-300"><i class="fa-solid fa-chevron-left"></i></button>
-                            <button onclick="mudarMes(1)" class="bg-slate-800 px-2.5 py-1 rounded-lg text-xs text-slate-300"><i class="fa-solid fa-chevron-right"></i></button>
-                            <button onclick="abrirModalEvento()" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-medium ml-1"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/70 border border-slate-800 p-3 rounded-2xl">
-                        <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-500 mb-2">
-                            <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
-                        </div>
-                        <div class="grid grid-cols-7 gap-1">
-                            ${diasHtml}
-                        </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Agendamentos do Mês</h3>
-                        ${appData.agenda.map(ev => `
-                            <div class="bg-slate-800/80 border border-slate-700/60 p-3 rounded-xl flex justify-between items-center">
-                                <div>
-                                    <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">${ev.data.split('-').reverse().join('/')}</span>
-                                    <span class="text-[10px] font-bold text-slate-400 ml-1">${ev.projetoId}</span>
-                                    <p class="text-xs font-bold text-white mt-1">${ev.titulo}</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function mudarMes(delta) {
-            mesAgendaAtual.setMonth(mesAgendaAtual.getMonth() + delta);
-            renderCurrentView();
-        }
-
-        function abrirModalEvento() {
-            const sel = document.getElementById('ev-projeto');
-            sel.innerHTML = `<option value="GERAL">Geral / Sem Projeto</option>` + appData.projetos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente}</option>`).join('');
-            document.getElementById('modal-evento').classList.remove('hidden');
-        }
-
-        function salvarEvento(e) {
-            e.preventDefault();
-            const data = document.getElementById('ev-data').value;
-            const projetoId = document.getElementById('ev-projeto').value;
-            const titulo = document.getElementById('ev-titulo').value;
-            appData.agenda.push({ id: `EV-00${appData.agenda.length+1}`, data, projetoId, titulo });
-            registrarLog("Agenda", `Agendado: "${titulo}" para ${data}.`);
-            salvarStorage();
-            fecharModal('modal-evento');
-            renderCurrentView();
-        }
-
-        // -------------------------------------------------------------
-        // 5. DESPESAS (AGRUPADAS POR PROJETO + EDIÇÃO)
-        // -------------------------------------------------------------
-        function renderDespesas(container) {
-            const totalGeral = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
-            const grupos = {};
-            appData.despesas.forEach(d => {
-                if(!grupos[d.projetoId]) grupos[d.projetoId] = [];
-                grupos[d.projetoId].push(d);
-            });
-
-            container.innerHTML = `
-                <div class="p-4 space-y-4">
-                    <div class="flex justify-between items-center bg-slate-800/80 border border-slate-700 p-3.5 rounded-2xl">
-                        <div>
-                            <p class="text-[11px] text-slate-400">Total Geral Acumulado</p>
-                            <p class="text-lg font-bold text-emerald-400">R$ ${totalGeral.toFixed(2)}</p>
-                        </div>
-                        <button onclick="abrirModalDespesa()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold">
-                            <i class="fa-solid fa-plus mr-1"></i> Nova Despesa
-                        </button>
-                    </div>
-
-                    <div class="space-y-3">
-                        ${Object.keys(grupos).map(projId => {
-                            const lista = grupos[projId];
-                            const subtotal = lista.reduce((acc, x) => acc + x.valor, 0);
-                            const projObj = appData.projetos.find(p => p.id === projId);
-                            const tituloGrupo = projId === 'EXTRA' ? '⭐ Despesas Extras / Avulsas' : `${projId} - ${projObj ? projObj.cliente : 'Projeto'}`;
-
-                            return `
-                                <details open class="bg-slate-800/70 border border-slate-700/70 rounded-2xl overflow-hidden">
-                                    <summary class="p-3.5 text-xs font-bold text-white cursor-pointer flex justify-between items-center bg-slate-800">
-                                        <span>${tituloGrupo}</span>
-                                        <span class="text-emerald-400">R$ ${subtotal.toFixed(2)}</span>
-                                    </summary>
-                                    <div class="p-3 space-y-2">
-                                        ${lista.map(d => `
-                                            <div class="bg-slate-900/80 border border-slate-800 p-2.5 rounded-xl flex justify-between items-center">
-                                                <div>
-                                                    <span class="text-xs font-bold text-slate-200">${d.categoria}</span>
-                                                    <p class="text-[11px] text-slate-400">${d.obs} • ${d.data}</p>
-                                                </div>
-                                                <div class="flex items-center space-x-2">
-                                                    <span class="text-xs font-bold text-emerald-400">R$ ${d.valor.toFixed(2)}</span>
-                                                    <button onclick="abrirModalDespesa('${d.id}')" class="text-slate-400 hover:text-blue-400 p-1">
-                                                        <i class="fa-solid fa-pen text-xs"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </details>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function abrirModalDespesa(editId = null, preSelectProj = null) {
-            const projetosAtivos = appData.projetos.filter(p => p.statusGeral !== 'Finalizado' && p.statusGeral !== 'Cancelado');
-            const sel = document.getElementById('desp-projeto');
-            sel.innerHTML = `<option value="EXTRA">⭐ Despesa Extra / Avulsa</option>` + projetosAtivos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente} (${p.statusGeral})</option>`).join('');
-
-            document.getElementById('desp-edit-id').value = editId || '';
-            if(editId) {
-                const d = appData.despesas.find(x => x.id === editId);
-                document.getElementById('modal-desp-titulo').innerText = "Editar Despesa";
-                sel.value = d.projetoId;
-                document.getElementById('desp-cat').value = d.categoria;
-                document.getElementById('desp-valor').value = d.valor;
-                document.getElementById('desp-obs').value = d.obs;
-            } else {
-                document.getElementById('modal-desp-titulo').innerText = "Lançar Despesa";
-                if(preSelectProj) sel.value = preSelectProj;
-                document.getElementById('desp-valor').value = '';
-                document.getElementById('desp-obs').value = '';
-            }
-            document.getElementById('modal-despesa').classList.remove('hidden');
-        }
-
-        function salvarDespesa(e) {
-            e.preventDefault();
-            const editId = document.getElementById('desp-edit-id').value;
-            const projetoId = document.getElementById('desp-projeto').value;
-            const categoria = document.getElementById('desp-cat').value;
-            const valor = parseFloat(document.getElementById('desp-valor').value);
-            const obs = document.getElementById('desp-obs').value;
-
-            if(editId) {
-                const d = appData.despesas.find(x => x.id === editId);
-                d.projetoId = projetoId; d.categoria = categoria; d.valor = valor; d.obs = obs;
-                registrarLog("Despesa", `Despesa ${editId} editada (R$ ${valor.toFixed(2)}).`);
-            } else {
-                const novoId = `DSP-00${appData.despesas.length + 1}`;
-                appData.despesas.push({ id: novoId, projetoId, data: new Date().toLocaleDateString('pt-BR'), categoria, valor, obs });
-                registrarLog("Despesa", `Nova despesa ${novoId} lançada em ${projetoId} (R$ ${valor.toFixed(2)}).`);
-            }
-
-            salvarStorage();
-            fecharModal('modal-despesa');
-            renderCurrentView();
-        }
-
-        // -------------------------------------------------------------
-        // 6. TELA DE LOGS DO SISTEMA
-        // -------------------------------------------------------------
-        function renderLogs(container) {
-            container.innerHTML = `
-                <div class="p-4 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-sm font-bold text-white">Histórico de Logs do Sistema</h2>
-                        <span class="text-[10px] text-slate-400">${appData.logs.length} registros</span>
-                    </div>
-                    <div class="space-y-2">
-                        ${appData.logs.map(l => `
-                            <div class="bg-slate-800/70 border border-slate-800 p-3 rounded-xl space-y-1">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">${l.acao}</span>
-                                    <span class="text-[10px] text-slate-500 font-mono">${l.dataHora}</span>
-                                </div>
-                                <p class="text-xs text-slate-300">${l.detalhe}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        // Inicialização
         renderCurrentView();
     </script>
 </body>
