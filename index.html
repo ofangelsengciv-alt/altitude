@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão Operacional de Projetos</title>
+    <title>Operacional Pro - Sistema Integrado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -29,73 +29,160 @@
         }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .radio-btn:checked + label {
+            background-color: #2563eb;
+            border-color: #3b82f6;
+            color: white;
+        }
+        .radio-btn-no:checked + label {
+            background-color: #d97706;
+            border-color: #f59e0b;
+            color: white;
+        }
+        .radio-btn-na:checked + label {
+            background-color: #475569;
+            border-color: #64748b;
+            color: white;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center">
 
-    <div class="mobile-container">
-        <!-- HEADER FIXO -->
-        <header class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center z-10">
-            <div class="flex items-center space-x-2">
-                <div class="bg-blue-600 text-white p-2 rounded-xl font-bold text-sm">
+    <div class="mobile-container" id="app-shell">
+        
+        <!-- TELA DE LOGIN -->
+        <div id="login-screen" class="absolute inset-0 bg-slate-900 z-50 flex flex-col justify-center p-6">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-600/30 mb-3">
                     <i class="fa-solid fa-helmet-safety"></i>
                 </div>
+                <h1 class="text-xl font-bold text-white">Operacional Pro</h1>
+                <p class="text-xs text-slate-400 mt-1">Gestão de Obras, Manutenção & Campo</p>
+            </div>
+            <form onsubmit="fazerLogin(event)" class="space-y-4">
                 <div>
-                    <h1 class="font-bold text-sm text-slate-100">Operacional Pro</h1>
-                    <p class="text-xs text-slate-400" id="header-subtitle">Gestão de Obras & Manutenção</p>
+                    <label class="block text-xs text-slate-400 mb-1">Usuário</label>
+                    <input type="text" id="login-user" value="admin" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="admin">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Senha</label>
+                    <input type="password" id="login-pass" value="admin" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="•••••">
+                </div>
+                <p id="login-erro" class="text-xs text-red-400 hidden text-center">Usuário ou senha inválidos. Use admin / admin.</p>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
+                    Entrar no Sistema
+                </button>
+            </form>
+            <p class="text-[10px] text-slate-500 text-center mt-6">Acesso padrão: admin / admin</p>
+        </div>
+
+        <!-- MENU LATERAL RETRÁTIL (DRAWER) -->
+        <div id="side-drawer-overlay" onclick="toggleDrawer(false)" class="absolute inset-0 bg-black/60 z-40 hidden transition-opacity"></div>
+        <aside id="side-drawer" class="absolute top-0 bottom-0 left-0 w-64 bg-slate-900 border-r border-slate-700 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-blue-600 text-white p-1.5 rounded-lg text-xs"><i class="fa-solid fa-helmet-safety"></i></div>
+                    <span class="font-bold text-sm text-white">Menu Geral</span>
+                </div>
+                <button onclick="toggleDrawer(false)" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-3 space-y-1">
+                <button onclick="navigate('painel')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-chart-pie w-4 text-blue-400"></i><span>Painel Gerencial</span>
+                </button>
+                <button onclick="navigate('projetos')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-folder-open w-4 text-emerald-400"></i><span>Projetos & Obras</span>
+                </button>
+                <button onclick="navigate('clientes')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-users w-4 text-purple-400"></i><span>Clientes</span>
+                </button>
+                <button onclick="navigate('agenda')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-calendar-days w-4 text-amber-400"></i><span>Agenda & Vistorias</span>
+                </button>
+                <button onclick="navigate('despesas')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-wallet w-4 text-teal-400"></i><span>Despesas</span>
+                </button>
+                <button onclick="navigate('logs')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-clock-rotate-left w-4 text-rose-400"></i><span>Logs do Sistema</span>
+                </button>
+            </div>
+            <div class="p-3 border-t border-slate-800 space-y-2">
+                <button onclick="resetData()" class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fa-solid fa-rotate-right"></i><span>Resetar Dados Teste</span>
+                </button>
+                <button onclick="fazerLogout()" class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-500/10 transition">
+                    <i class="fa-solid fa-right-from-bracket"></i><span>Sair (Logout)</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- HEADER FIXO -->
+        <header class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center z-10">
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleDrawer(true)" class="text-slate-300 hover:text-white p-1.5 rounded-lg bg-slate-800 border border-slate-700">
+                    <i class="fa-solid fa-bars text-sm"></i>
+                </button>
+                <div>
+                    <h1 class="font-bold text-sm text-slate-100" id="header-title">Painel Gerencial</h1>
+                    <p class="text-[10px] text-slate-400">Operacional Pro</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
-                <button onclick="resetData()" title="Resetar Dados" class="text-slate-400 hover:text-white text-sm">
-                    <i class="fa-solid fa-rotate-right"></i>
-                </button>
-                <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/30">
-                    OP
-                </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded-md border border-blue-500/20 font-semibold">ADMIN</span>
             </div>
         </header>
 
-        <!-- CONTEÚDO DINÂMICO (VIEWS) -->
-        <main class="flex-1 overflow-y-auto hide-scrollbar pb-20" id="main-content">
-            <!-- Inserido dinamicamente via JS -->
-        </main>
+        <!-- CONTEÚDO DINÂMICO -->
+        <main class="flex-1 overflow-y-auto hide-scrollbar pb-20" id="main-content"></main>
 
         <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
-        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 py-2 px-6 flex justify-between items-center z-20">
-            <button onclick="switchTab('painel')" id="nav-painel" class="flex flex-col items-center text-blue-500">
-                <i class="fa-solid fa-chart-pie text-lg"></i>
-                <span class="text-[10px] mt-1 font-medium">Painel</span>
+        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 py-2 px-3 flex justify-around items-center z-20">
+            <button onclick="navigate('painel')" id="nav-painel" class="flex flex-col items-center text-blue-500">
+                <i class="fa-solid fa-chart-pie text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Painel</span>
             </button>
-            <button onclick="switchTab('projetos')" id="nav-projetos" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
-                <i class="fa-solid fa-folder-open text-lg"></i>
-                <span class="text-[10px] mt-1 font-medium">Projetos</span>
+            <button onclick="navigate('projetos')" id="nav-projetos" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-folder-open text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Projetos</span>
             </button>
-            <button onclick="switchTab('despesas')" id="nav-despesas" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
-                <i class="fa-solid fa-wallet text-lg"></i>
-                <span class="text-[10px] mt-1 font-medium">Despesas</span>
+            <button onclick="navigate('clientes')" id="nav-clientes" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-users text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Clientes</span>
+            </button>
+            <button onclick="navigate('agenda')" id="nav-agenda" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-calendar-days text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Agenda</span>
+            </button>
+            <button onclick="navigate('despesas')" id="nav-despesas" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-wallet text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Despesas</span>
+            </button>
+            <button onclick="navigate('logs')" id="nav-logs" class="flex flex-col items-center text-slate-400 hover:text-slate-200">
+                <i class="fa-solid fa-clock-rotate-left text-base"></i>
+                <span class="text-[9px] mt-1 font-medium">Logs</span>
             </button>
         </nav>
     </div>
 
-    <!-- MODAL DE NOVO PROJETO -->
-    <div id="modal-projeto" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-4">
+    <!-- MODAL: NOVO PROJETO -->
+    <div id="modal-projeto" class="fixed inset-0 bg-black/75 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-base text-slate-100">Novo Projeto (Venda)</h3>
-                <button onclick="toggleModalProjeto(false)" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharModal('modal-projeto')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="salvarNovoProjeto(event)" class="space-y-3">
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Nome do Cliente / Empresa</label>
-                    <input type="text" id="novo-cliente" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Ex: Supermercado Central">
+                    <label class="block text-xs text-slate-400 mb-1">Selecionar Cliente</label>
+                    <select id="novo-proj-cliente" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"></select>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Localização (Cidade/Região)</label>
-                    <input type="text" id="novo-local" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500" placeholder="Ex: Presidente Prudente - SP">
+                    <label class="block text-xs text-slate-400 mb-1">Localização da Obra</label>
+                    <input type="text" id="novo-proj-local" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Presidente Prudente - SP">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Tipo de Serviço</label>
-                    <select id="novo-servico" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <select id="novo-proj-servico" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                         <option value="Instalação">Instalação</option>
                         <option value="Manutenção Preventiva">Manutenção Preventiva</option>
                         <option value="Vistoria">Vistoria</option>
@@ -103,56 +190,169 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Modelo do Equipamento</label>
-                    <select id="novo-equipamento" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
+                    <label class="block text-xs text-slate-400 mb-1">Equipamento</label>
+                    <select id="novo-proj-equip" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                         <option value="Eq. A - Comercial">Equipamento A - Comercial</option>
                         <option value="Eq. B - Comercial">Equipamento B - Comercial</option>
                         <option value="Eq. A - Residencial">Equipamento A - Residencial</option>
                         <option value="Eq. B - Residencial">Equipamento B - Residencial</option>
                     </select>
                 </div>
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm transition">Cadastrar e Iniciar</button>
-                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm mt-2">Criar Projeto</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DE QUESTIONÁRIO DA TAREFA -->
+    <!-- MODAL: QUESTIONÁRIO DA TAREFA (COM BOTÕES DE RÁDIO E BOTÃO ÚNICO CONCLUIR/SALVAR) -->
     <div id="modal-questionario" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-3">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-md h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
             <div class="bg-slate-800 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
                 <div>
                     <h3 class="font-bold text-sm text-white" id="q-titulo-etapa">Etapa</h3>
-                    <p class="text-xs text-blue-400" id="q-subtitulo">Validação por Questionário</p>
+                    <p class="text-[11px] text-blue-400">Responda todas como "Sim" para concluir automaticamente</p>
                 </div>
-                <button onclick="fecharQuestionario()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharModal('modal-questionario')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-4 flex-1 overflow-y-auto space-y-4" id="q-container-perguntas">
-                <!-- Perguntas injetadas via JS -->
-            </div>
-            <div class="bg-slate-800 p-3 border-t border-slate-700 flex space-x-2">
-                <button onclick="salvarProgressoQuest(false)" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 rounded-xl text-xs transition">Salvar Progresso</button>
-                <button onclick="salvarProgressoQuest(true)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2 rounded-xl text-xs transition">Encerrar / Concluir</button>
+            <div class="p-4 flex-1 overflow-y-auto space-y-3" id="q-container-perguntas"></div>
+            <div class="bg-slate-800 p-3 border-t border-slate-700">
+                <button onclick="processarFormularioEtapa()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs transition shadow-lg">
+                    <i class="fa-solid fa-check-double mr-1.5"></i> Concluir / Salvar Progresso
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE VISUALIZAÇÃO DE DOCUMENTOS TÉCNICOS -->
-    <div id="modal-docs" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+    <!-- MODAL: ADICIONAR / EDITAR DESPESA -->
+    <div id="modal-despesa" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-white" id="modal-desp-titulo">Lançar Despesa</h3>
+                <button onclick="fecharModal('modal-despesa')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="salvarDespesa(event)" class="space-y-3">
+                <input type="hidden" id="desp-edit-id">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Vincular Projeto</label>
+                    <select id="desp-projeto" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+                        <select id="desp-cat" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                            <option value="Combustível">Combustível</option>
+                            <option value="Alimentação">Alimentação</option>
+                            <option value="Hospedagem">Hospedagem</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Valor (R$)</label>
+                        <input type="number" step="0.01" id="desp-valor" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="0.00">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Observação</label>
+                    <input type="text" id="desp-obs" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Abastecimento posto">
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl text-sm">Salvar Despesa</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADICIONAR ARQUIVO AO PROJETO -->
+    <div id="modal-arquivo" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-white">Anexar Arquivo ao Projeto</h3>
+                <button onclick="fecharModal('modal-arquivo')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="salvarArquivoProjeto(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Nome / Título do Arquivo</label>
+                    <input type="text" id="arq-nome" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Planta Baixa Rev02.pdf">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Tipo de Documento</label>
+                    <select id="arq-tipo" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                        <option value="Diagrama Elétrico">Diagrama Elétrico</option>
+                        <option value="Manual de Montagem">Manual de Montagem</option>
+                        <option value="Foto / Vistoria">Foto / Vistoria</option>
+                        <option value="Planta / Projeto">Planta / Projeto</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Selecionar Arquivo (Simulação)</label>
+                    <input type="file" id="arq-file" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Anexar Arquivo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ETIQUETA DE IDENTIFICAÇÃO -->
+    <div id="modal-etiqueta" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="font-bold text-sm text-white" id="doc-titulo">Documento Técnico</h3>
-                <button onclick="fecharDocs()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-sm text-white">Pré-visualização de Etiqueta</h3>
+                <button onclick="fecharModal('modal-etiqueta')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="bg-slate-800 p-4 rounded-xl text-center space-y-3">
-                <i class="fa-solid fa-file-pdf text-4xl text-blue-400"></i>
-                <p class="text-xs text-slate-300" id="doc-descricao">Visualizando manual e diagramas de montagem padrão para o equipamento selecionado.</p>
-                <div class="border border-dashed border-slate-600 p-3 rounded-lg bg-slate-900 text-xs text-slate-400">
-                    [ Pré-visualização do Diagrama / PDF carregada com sucesso ]
+            <div id="etiqueta-preview" class="bg-white text-slate-900 p-4 rounded-xl border-2 border-dashed border-slate-400 space-y-2">
+                <!-- Conteúdo da etiqueta -->
+            </div>
+            <button onclick="window.print()" class="w-full mt-4 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-print"></i><span>Imprimir Etiqueta</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO / EDITAR CLIENTE -->
+    <div id="modal-cliente" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-white" id="modal-cli-titulo">Novo Cliente</h3>
+                <button onclick="fecharModal('modal-cliente')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="salvarCliente(event)" class="space-y-3">
+                <input type="hidden" id="cli-edit-id">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Nome / Razão Social</label>
+                    <input type="text" id="cli-nome" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
                 </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Telefone / WhatsApp</label>
+                    <input type="text" id="cli-tel" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="(18) 99999-9999">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Cidade / Endereço</label>
+                    <input type="text" id="cli-cidade" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Salvar Cliente</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: NOVO EVENTO NA AGENDA -->
+    <div id="modal-evento" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-base text-white">Novo Agendamento</h3>
+                <button onclick="fecharModal('modal-evento')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <button onclick="fecharDocs()" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-xl text-xs">Fechar</button>
+            <form onsubmit="salvarEvento(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Data</label>
+                    <input type="date" id="ev-data" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Projeto Vinculado</label>
+                    <select id="ev-projeto" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"></select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Descrição do Compromisso</label>
+                    <input type="text" id="ev-titulo" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Vistoria Técnica Inicial">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl text-sm">Agendar</button>
+            </form>
         </div>
     </div>
 
@@ -184,9 +384,15 @@
         ];
 
         const dadosIniciais = {
+            clientes: [
+                { id: "CLI-001", nome: "Supermercado Exemplo", tel: "(18) 99711-2233", cidade: "Presidente Prudente - SP" },
+                { id: "CLI-002", nome: "Residência Silva", tel: "(18) 99644-5566", cidade: "Álvares Machado - SP" },
+                { id: "CLI-003", nome: "Hospital Central", tel: "(18) 3221-0099", cidade: "Presidente Prudente - SP" }
+            ],
             projetos: [
                 {
                     id: "PRJ-001",
+                    clienteId: "CLI-001",
                     cliente: "Supermercado Exemplo",
                     local: "Presidente Prudente - SP",
                     servico: "Instalação",
@@ -194,14 +400,20 @@
                     etapaAtualId: 3,
                     statusGeral: "Em Execução",
                     motivoPausa: "",
+                    emTrabalho: true,
+                    arquivos: [
+                        { nome: "Diagrama_Eletrico_A.pdf", tipo: "Diagrama Elétrico", data: "10/11/2026" },
+                        { nome: "Manual_Montagem_Comercial.pdf", tipo: "Manual de Montagem", data: "10/11/2026" }
+                    ],
                     etapasState: {
                         1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:30"}] },
                         2: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "09:00", fim: "11:00"}] },
-                        3: { status: "Em Execução", respostas: ["Sim","Sim","Não","","","","","","",""], logs: [{inicio: "13:00", fim: "14:00"}] }
+                        3: { status: "Em Execução", respostas: ["Sim","Sim","Não","","","","","","",""], logs: [{inicio: "13:00", fim: ""}] }
                     }
                 },
                 {
                     id: "PRJ-002",
+                    clienteId: "CLI-002",
                     cliente: "Residência Silva",
                     local: "Álvares Machado - SP",
                     servico: "Instalação",
@@ -209,6 +421,10 @@
                     etapaAtualId: 2,
                     statusGeral: "Pausado",
                     motivoPausa: "Falta aprovação de planta pelo cliente",
+                    emTrabalho: false,
+                    arquivos: [
+                        { nome: "Planta_Residencial_Silva.pdf", tipo: "Planta / Projeto", data: "11/11/2026" }
+                    ],
                     etapasState: {
                         1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "10:00", fim: "10:30"}] },
                         2: { status: "Pausado", respostas: ["Sim","Não","","","","","","","",""], logs: [{inicio: "14:00", fim: "15:00"}] }
@@ -217,102 +433,175 @@
             ],
             despesas: [
                 { id: "DSP-001", projetoId: "PRJ-001", data: "10/11/2026", categoria: "Combustível", valor: 180.50, obs: "Deslocamento vistoria" },
-                { id: "DSP-002", projetoId: "PRJ-002", data: "11/11/2026", categoria: "Hospedagem", valor: 220.00, obs: "Hotel equipe externa" },
-                { id: "DSP-003", projetoId: "EXTRA", data: "12/11/2026", categoria: "Outros", valor: 95.00, obs: "Compra de brocas para furadeira" }
+                { id: "DSP-002", projetoId: "PRJ-001", data: "12/11/2026", categoria: "Alimentação", valor: 65.00, obs: "Almoço equipe" },
+                { id: "DSP-003", projetoId: "PRJ-002", data: "11/11/2026", categoria: "Hospedagem", valor: 220.00, obs: "Hotel equipe externa" },
+                { id: "DSP-004", projetoId: "EXTRA", data: "12/11/2026", categoria: "Outros", valor: 95.00, obs: "Compra de brocas para furadeira" }
+            ],
+            agenda: [
+                { id: "EV-001", data: "2026-11-12", projetoId: "PRJ-001", titulo: "Conferência de Produção & Insumos" },
+                { id: "EV-002", data: "2026-11-15", projetoId: "PRJ-002", titulo: "Retorno Visita Técnica Silva" },
+                { id: "EV-003", data: "2026-11-20", projetoId: "PRJ-001", titulo: "Previsão Montagem Supermercado" }
+            ],
+            logs: [
+                { dataHora: "12/11/2026 08:00", acao: "Sistema", detalhe: "Sistema iniciado com dados operacionais." },
+                { dataHora: "12/11/2026 13:00", acao: "PRJ-001", detalhe: "Iniciada execução na etapa 3. Produção & Custos." }
             ]
         };
 
-        let appData = JSON.parse(localStorage.getItem('app_operacional_data')) || dadosIniciais;
+        let appData = JSON.parse(localStorage.getItem('operacional_pro_v2')) || dadosIniciais;
         let currentTab = 'painel';
         let activeProjetoId = null;
+        let activeClienteId = null;
         let activeEtapaId = null;
+        let mesAgendaAtual = new Date(2026, 10, 1); // Novembro 2026
 
         function salvarStorage() {
-            localStorage.setItem('app_operacional_data', JSON.stringify(appData));
+            localStorage.setItem('operacional_pro_v2', JSON.stringify(appData));
+        }
+
+        function registrarLog(acao, detalhe) {
+            const agora = new Date();
+            const dataHora = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            appData.logs.unshift({ dataHora, acao, detalhe });
+            salvarStorage();
         }
 
         function resetData() {
-            if(confirm("Deseja restaurar os dados de demonstração iniciais?")) {
+            if(confirm("Deseja restaurar os dados de teste iniciais?")) {
                 appData = JSON.parse(JSON.stringify(dadosIniciais));
                 salvarStorage();
                 renderCurrentView();
+                toggleDrawer(false);
             }
         }
 
-        function switchTab(tab) {
+        // AUTENTICAÇÃO
+        function fazerLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value.trim();
+            if(u === 'admin' && p === 'admin') {
+                document.getElementById('login-screen').classList.add('hidden');
+                registrarLog("Login", "Usuário admin acessou o sistema.");
+                renderCurrentView();
+            } else {
+                document.getElementById('login-erro').classList.remove('hidden');
+            }
+        }
+
+        function fazerLogout() {
+            toggleDrawer(false);
+            document.getElementById('login-screen').classList.remove('hidden');
+            registrarLog("Logout", "Usuário encerrou a sessão.");
+        }
+
+        // DRAWER LATERAL
+        function toggleDrawer(open) {
+            const drawer = document.getElementById('side-drawer');
+            const overlay = document.getElementById('side-drawer-overlay');
+            if(open) {
+                drawer.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function fecharModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function navigate(tab) {
             currentTab = tab;
             activeProjetoId = null;
+            activeClienteId = null;
+            toggleDrawer(false);
+
+            const titles = {
+                painel: "Painel Gerencial",
+                projetos: "Projetos & Obras",
+                clientes: "Gestão de Clientes",
+                agenda: "Agenda Operacional",
+                despesas: "Controle de Despesas",
+                logs: "Logs de Atividade"
+            };
+            document.getElementById('header-title').innerText = titles[tab] || "Operacional Pro";
+
             document.querySelectorAll('nav button').forEach(btn => {
                 btn.classList.remove('text-blue-500');
                 btn.classList.add('text-slate-400');
             });
-            document.getElementById(`nav-${tab}`).classList.remove('text-slate-400');
-            document.getElementById(`nav-${tab}`).classList.add('text-blue-500');
+            const navBtn = document.getElementById(`nav-${tab}`);
+            if(navBtn) {
+                navBtn.classList.remove('text-slate-400');
+                navBtn.classList.add('text-blue-500');
+            }
             renderCurrentView();
         }
 
         function renderCurrentView() {
             const main = document.getElementById('main-content');
             main.innerHTML = '';
-            if (activeProjetoId) {
+
+            if(activeProjetoId) {
                 renderDetalhesProjeto(activeProjetoId);
                 return;
             }
-            if (currentTab === 'painel') renderPainel(main);
-            else if (currentTab === 'projetos') renderProjetos(main);
-            else if (currentTab === 'despesas') renderDespesas(main);
+            if(activeClienteId) {
+                renderDetalhesCliente(activeClienteId);
+                return;
+            }
+
+            if(currentTab === 'painel') renderPainel(main);
+            else if(currentTab === 'projetos') renderProjetos(main);
+            else if(currentTab === 'clientes') renderClientes(main);
+            else if(currentTab === 'agenda') renderAgenda(main);
+            else if(currentTab === 'despesas') renderDespesas(main);
+            else if(currentTab === 'logs') renderLogs(main);
         }
 
+        // -------------------------------------------------------------
+        // 1. PAINEL GERENCIAL
+        // -------------------------------------------------------------
         function renderPainel(container) {
             const totalProj = appData.projetos.length;
-            const emAndamento = appData.projetos.filter(p => p.statusGeral === 'Em Execução' || p.statusGeral === 'Aguardando').length;
+            const emExec = appData.projetos.filter(p => p.statusGeral === 'Em Execução').length;
             const pausados = appData.projetos.filter(p => p.statusGeral === 'Pausado').length;
             const finalizados = appData.projetos.filter(p => p.statusGeral === 'Finalizado').length;
             const totalDesp = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
 
             container.innerHTML = `
                 <div class="p-4 space-y-4">
-                    <div class="bg-gradient-to-r from-blue-900/50 to-slate-900 border border-blue-500/30 p-4 rounded-2xl">
-                        <h2 class="text-sm font-bold text-white mb-1">Visão Operacional Geral</h2>
-                        <p class="text-xs text-slate-300">Acompanhamento em tempo real das equipes de base e campo.</p>
-                    </div>
-
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
-                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-folder text-blue-400 mr-1.5"></i> Total Projetos</div>
+                        <div onclick="navigate('projetos')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-folder text-blue-400 mr-1.5"></i> Projetos</div>
                             <div class="text-xl font-bold text-white">${totalProj}</div>
                         </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
-                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-spinner text-emerald-400 mr-1.5"></i> Em Andamento</div>
-                            <div class="text-xl font-bold text-white">${emAndamento}</div>
+                        <div onclick="navigate('projetos')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-play text-emerald-400 mr-1.5"></i> Em Execução</div>
+                            <div class="text-xl font-bold text-white">${emExec}</div>
                         </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
-                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-circle-pause text-amber-400 mr-1.5"></i> Pausados</div>
+                        <div onclick="navigate('projetos')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-pause text-amber-400 mr-1.5"></i> Pausados</div>
                             <div class="text-xl font-bold text-white">${pausados}</div>
                         </div>
-                        <div class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl">
-                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-check-circle text-blue-400 mr-1.5"></i> Finalizados</div>
-                            <div class="text-xl font-bold text-white">${finalizados}</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-semibold text-slate-300"><i class="fa-solid fa-wallet text-emerald-400 mr-1.5"></i> Custo Total Viagens & Extras</span>
-                            <span class="text-sm font-bold text-emerald-400">R$ ${totalDesp.toFixed(2)}</span>
+                        <div onclick="navigate('despesas')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer">
+                            <div class="text-slate-400 text-xs mb-1"><i class="fa-solid fa-wallet text-teal-400 mr-1.5"></i> Despesas</div>
+                            <div class="text-base font-bold text-emerald-400 mt-1">R$ ${totalDesp.toFixed(2)}</div>
                         </div>
                     </div>
 
                     <div class="space-y-2">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Projetos Pausados / Com Alerta</h3>
-                        ${pausados === 0 ? '<div class="bg-slate-800/40 border border-slate-800 p-3 rounded-xl text-xs text-slate-400 text-center">Nenhum projeto pausado no momento.</div>' : ''}
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Alertas & Projetos Pausados</h3>
+                        ${pausados === 0 ? '<div class="bg-slate-800/40 p-3 rounded-xl text-xs text-slate-400 text-center">Nenhuma pendência crítica.</div>' : ''}
                         ${appData.projetos.filter(p => p.statusGeral === 'Pausado').map(p => `
-                            <div onclick="abrirDetalhesProjeto('${p.id}')" class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl cursor-pointer hover:bg-amber-500/20 transition">
+                            <div onclick="abrirProjeto('${p.id}')" class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl cursor-pointer">
                                 <div class="flex justify-between items-center mb-1">
                                     <span class="text-xs font-bold text-amber-400">${p.id} - ${p.cliente}</span>
                                     <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full">Pausado</span>
                                 </div>
-                                <p class="text-xs text-slate-300 italic"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${p.motivoPausa || 'Aguardando liberação'}</p>
+                                <p class="text-xs text-slate-300">${p.motivoPausa}</p>
                             </div>
                         `).join('')}
                     </div>
@@ -320,35 +609,37 @@
             `;
         }
 
+        // -------------------------------------------------------------
+        // 2. PROJETOS (LISTA + TELA ÚNICA DETALHADA)
+        // -------------------------------------------------------------
         function renderProjetos(container) {
             container.innerHTML = `
                 <div class="p-4 space-y-3">
-                    <div class="flex justify-between items-center mb-1">
-                        <h2 class="text-sm font-bold text-white">Lista de Projetos</h2>
-                        <button onclick="toggleModalProjeto(true)" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-xs font-medium transition flex items-center space-x-1.5">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">Todos os Projetos</h2>
+                        <button onclick="abrirModalNovoProjeto()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-xs font-medium flex items-center space-x-1">
                             <i class="fa-solid fa-plus"></i><span>Novo Projeto</span>
                         </button>
                     </div>
-
                     <div class="space-y-2.5">
                         ${appData.projetos.map(p => {
                             const etapaNome = ETAPAS_PADRAO.find(e => e.id === p.etapaAtualId)?.nome || 'Concluído';
-                            let badgeColor = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-                            if(p.statusGeral === 'Pausado') badgeColor = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-                            if(p.statusGeral === 'Finalizado') badgeColor = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+                            let badge = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+                            if(p.statusGeral === 'Pausado') badge = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+                            if(p.statusGeral === 'Finalizado') badge = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
 
                             return `
-                                <div onclick="abrirDetalhesProjeto('${p.id}')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer hover:border-blue-500/50 transition">
-                                    <div class="flex justify-between items-start mb-1.5">
+                                <div onclick="abrirProjeto('${p.id}')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer hover:border-blue-500/50 transition">
+                                    <div class="flex justify-between items-start">
                                         <div>
                                             <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-md">${p.id}</span>
                                             <h3 class="text-sm font-bold text-white mt-1">${p.cliente}</h3>
                                         </div>
-                                        <span class="text-[10px] px-2 py-0.5 rounded-full border ${badgeColor} font-medium">${p.statusGeral}</span>
+                                        <span class="text-[10px] px-2 py-0.5 rounded-full border ${badge} font-medium">${p.statusGeral}</span>
                                     </div>
                                     <div class="flex justify-between items-center text-xs text-slate-400 mt-2 pt-2 border-t border-slate-700/50">
-                                        <span><i class="fa-solid fa-location-dot mr-1 text-slate-500"></i>${p.local}</span>
-                                        <span class="text-slate-300 font-medium"><i class="fa-solid fa-layer-group mr-1 text-blue-400"></i>${etapaNome}</span>
+                                        <span><i class="fa-solid fa-location-dot mr-1"></i>${p.local}</span>
+                                        <span class="text-slate-300 font-medium">${etapaNome}</span>
                                     </div>
                                 </div>
                             `;
@@ -358,223 +649,180 @@
             `;
         }
 
-        function abrirDetalhesProjeto(id) {
+        function abrirProjeto(id) {
             activeProjetoId = id;
-            renderCurrentView();
-        }
-
-        function voltarListaProjetos() {
-            activeProjetoId = null;
+            document.getElementById('header-title').innerText = `Projeto ${id}`;
             renderCurrentView();
         }
 
         function renderDetalhesProjeto(id) {
             const p = appData.projetos.find(item => item.id === id);
             const container = document.getElementById('main-content');
+            const despesasProj = appData.despesas.filter(d => d.projetoId === id);
+            const totalDespProj = despesasProj.reduce((acc, d) => acc + d.valor, 0);
+
+            const etapasConcluidas = ETAPAS_PADRAO.filter(e => e.id < p.etapaAtualId);
+            const etapaAtualObj = ETAPAS_PADRAO.find(e => e.id === p.etapaAtualId);
+            const etapasFuturas = ETAPAS_PADRAO.filter(e => e.id > p.etapaAtualId);
+
+            const stateAtual = p.etapasState[p.etapaAtualId] || { status: 'Aguardando', respostas: Array(10).fill(""), logs: [] };
 
             container.innerHTML = `
                 <div class="p-4 space-y-4">
-                    <div class="flex items-center space-x-2">
-                        <button onclick="voltarListaProjetos()" class="bg-slate-800 text-slate-300 hover:text-white px-3 py-1.5 rounded-xl text-xs flex items-center space-x-1 border border-slate-700">
-                            <i class="fa-solid fa-arrow-left"></i><span>Voltar</span>
+                    <!-- Topo: Voltar e Ações Rápidas -->
+                    <div class="flex justify-between items-center">
+                        <button onclick="navigate('projetos')" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs border border-slate-700">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Voltar
                         </button>
-                        <span class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-1 rounded-md">${p.id}</span>
-                    </div>
-
-                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
-                        <h2 class="text-base font-bold text-white">${p.cliente}</h2>
-                        <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-wrench mr-1"></i> ${p.servico} • ${p.equipamento}</p>
-                        <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i> ${p.local}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-0.5">Manuais e Guias Técnicos</p>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="abrirDocs('Diagrama Elétrico - ${p.equipamento}')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-2.5 rounded-xl text-center flex flex-col items-center transition">
-                                <i class="fa-solid fa-bolt text-amber-400 text-sm mb-1"></i>
-                                <span class="text-[10px] text-slate-200 font-medium">Diagrama</span>
+                        <div class="flex space-x-1.5">
+                            <button onclick="abrirEtiqueta('${p.id}')" title="Imprimir Etiqueta" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1.5 rounded-xl text-xs border border-slate-700">
+                                <i class="fa-solid fa-tag mr-1"></i> Etiqueta
                             </button>
-                            <button onclick="abrirDocs('Manual de Montagem - ${p.equipamento}')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-2.5 rounded-xl text-center flex flex-col items-center transition">
-                                <i class="fa-solid fa-book text-blue-400 text-sm mb-1"></i>
-                                <span class="text-[10px] text-slate-200 font-medium">Manual</span>
-                            </button>
-                            <button onclick="abrirDocs('Normas & Guia de Vistoria')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-2.5 rounded-xl text-center flex flex-col items-center transition">
-                                <i class="fa-solid fa-shield-halved text-emerald-400 text-sm mb-1"></i>
-                                <span class="text-[10px] text-slate-200 font-medium">Normas</span>
+                            <button onclick="abrirModalDespesa(null, '${p.id}')" title="Adicionar Despesa" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2.5 py-1.5 rounded-xl text-xs border border-slate-700">
+                                <i class="fa-solid fa-plus mr-1"></i> Despesa
                             </button>
                         </div>
                     </div>
 
-                    <div class="space-y-2">
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-0.5">Fluxo de Etapas e Checklists</p>
-                        
-                        ${ETAPAS_PADRAO.map(etapa => {
-                            const state = p.etapasState[etapa.id] || { status: 'Aguardando', respostas: [], logs: [] };
-                            const isAtual = etapa.id === p.etapaAtualId;
-                            const isConcluida = state.status === 'Finalizado';
-                            const isPausada = state.status === 'Pausado';
-                            const isBloqueada = etapa.id > p.etapaAtualId;
-
-                            let borderColor = 'border-slate-800';
-                            let bgColor = 'bg-slate-900/60';
-                            let statusBadge = '<span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Aguardando</span>';
-
-                            if(isConcluida) {
-                                borderColor = 'border-emerald-500/30';
-                                bgColor = 'bg-slate-800/50';
-                                statusBadge = '<span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-md">Concluído</span>';
-                            } else if(isAtual) {
-                                borderColor = isPausada ? 'border-amber-500/50' : 'border-blue-500/60';
-                                bgColor = 'bg-slate-800';
-                                statusBadge = isPausada ? '<span class="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-md">Pausado</span>' : '<span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-md">Em Execução</span>';
-                            } else if(isBloqueada) {
-                                statusBadge = '<span class="text-[10px] bg-slate-900 text-slate-600 px-2 py-0.5 rounded-md">Bloqueado</span>';
-                            }
-
-                            if(isBloqueada && !isConcluida && !isAtual) return '';
-
-                            const ultimoLog = state.logs[state.logs.length - 1];
-
-                            return `
-                                <div class="border ${borderColor} ${bgColor} rounded-2xl p-3.5 space-y-2">
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center space-x-2">
-                                            <span class="text-xs font-bold text-slate-300">${etapa.nome}</span>
-                                        </div>
-                                        ${statusBadge}
-                                    </div>
-
-                                    ${isAtual ? `
-                                        <div class="pt-2 border-t border-slate-700/50 space-y-2">
-                                            <div class="text-[11px] text-slate-300 flex justify-between items-center">
-                                                <span>Sessão: ${ultimoLog ? `Início ${ultimoLog.inicio}` : 'Não Iniciada'}</span>
-                                                <span class="text-blue-400 font-medium">${state.respostas.filter(r=>r).length}/10 respondidas</span>
-                                            </div>
-
-                                            <div class="grid grid-cols-2 gap-2 pt-1">
-                                                <button onclick="iniciarTarefa('${p.id}', ${etapa.id})" class="bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-xl text-xs font-medium transition">
-                                                    <i class="fa-solid fa-play mr-1 text-emerald-400"></i> Iniciar
-                                                </button>
-                                                <button onclick="abrirQuestionario('${p.id}', ${etapa.id})" class="bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-xl text-xs font-medium transition">
-                                                    <i class="fa-solid fa-list-check mr-1"></i> Questionário
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderDespesas(container) {
-            const projetosAtivos = appData.projetos.filter(p => p.statusGeral !== 'Finalizado' && p.statusGeral !== 'Cancelado');
-            const totalDespesas = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
-
-            container.innerHTML = `
-                <div class="p-4 space-y-4">
+                    <!-- Card Dados do Projeto -->
                     <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl">
-                        <h2 class="text-sm font-bold text-white mb-3">Lançamento de Despesas de Campo</h2>
-                        <form onsubmit="salvarDespesa(event)" class="space-y-3">
+                        <div class="flex justify-between items-start">
                             <div>
-                                <label class="block text-xs text-slate-400 mb-1">Vincular ao Projeto ou Extra</label>
-                                <select id="desp-projeto" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                                    <option value="EXTRA">⭐ Despesa Extra / Avulsa (Sem Projeto)</option>
-                                    ${projetosAtivos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente} (${p.statusGeral})</option>`).join('')}
-                                </select>
+                                <h2 class="text-base font-bold text-white">${p.cliente}</h2>
+                                <p class="text-xs text-slate-400 mt-0.5">${p.servico} • ${p.equipamento}</p>
+                                <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${p.local}</p>
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Categoria</label>
-                                    <select id="desp-cat" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-                                        <option value="Combustível">Combustível</option>
-                                        <option value="Alimentação">Alimentação</option>
-                                        <option value="Hospedagem">Hospedagem</option>
-                                        <option value="Outros">Outros</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-400 mb-1">Valor (R$)</label>
-                                    <input type="number" step="0.01" id="desp-valor" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="0.00">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">Observação</label>
-                                <input type="text" id="desp-obs" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white" placeholder="Ex: Abastecimento posto">
-                            </div>
-                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl text-sm transition">Salvar Lançamento</button>
-                        </form>
+                            <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                                R$ ${totalDespProj.toFixed(2)}
+                            </span>
+                        </div>
                     </div>
 
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center px-1">
-                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Histórico</h3>
-                            <span class="text-xs font-bold text-emerald-400">Total: R$ ${totalDespesas.toFixed(2)}</span>
+                    <!-- Seção de Arquivos do Projeto + Botão Adicionar -->
+                    <div class="bg-slate-800/50 border border-slate-700/60 p-3.5 rounded-2xl space-y-2.5">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-300"><i class="fa-solid fa-paperclip text-blue-400 mr-1.5"></i>Arquivos & Manuais (${(p.arquivos || []).length})</span>
+                            <button onclick="document.getElementById('modal-arquivo').classList.remove('hidden')" class="bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 px-2.5 py-1 rounded-lg text-[11px] font-medium border border-blue-500/30">
+                                <i class="fa-solid fa-upload mr-1"></i> Adicionar Arquivo
+                            </button>
                         </div>
-                        ${appData.despesas.map(d => `
-                            <div class="bg-slate-800/80 border border-slate-700/60 p-3 rounded-xl flex justify-between items-center">
-                                <div>
+                        <div class="space-y-1.5">
+                            ${(p.arquivos || []).map(arq => `
+                                <div onclick="alert('Abrindo visualização do documento: ${arq.nome}')" class="bg-slate-900/80 p-2.5 rounded-xl flex justify-between items-center cursor-pointer hover:bg-slate-900 border border-slate-800">
                                     <div class="flex items-center space-x-2">
-                                        <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded font-bold">${d.projetoId}</span>
-                                        <span class="text-xs font-bold text-white">${d.categoria}</span>
+                                        <i class="fa-solid fa-file-pdf text-rose-400 text-sm"></i>
+                                        <div>
+                                            <p class="text-xs font-medium text-slate-200">${arq.nome}</p>
+                                            <p class="text-[10px] text-slate-500">${arq.tipo} • ${arq.data}</p>
+                                        </div>
                                     </div>
-                                    <p class="text-xs text-slate-400 mt-1">${d.obs}</p>
+                                    <i class="fa-solid fa-eye text-slate-400 text-xs"></i>
                                 </div>
-                                <div class="text-right">
-                                    <span class="text-sm font-bold text-emerald-400">R$ ${d.valor.toFixed(2)}</span>
-                                </div>
-                            </div>
-                        `).join('')}
+                            `).join('')}
+                        </div>
                     </div>
+
+                    <!-- ETAPAS CONCLUÍDAS (JANELA RETRÁTIL) -->
+                    ${etapasConcluidas.length > 0 ? `
+                        <details class="bg-slate-800/40 border border-emerald-500/20 rounded-2xl overflow-hidden">
+                            <summary class="p-3.5 text-xs font-bold text-emerald-400 cursor-pointer flex justify-between items-center">
+                                <span><i class="fa-solid fa-check-circle mr-1.5"></i> Etapas Concluídas (${etapasConcluidas.length})</span>
+                                <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                            </summary>
+                            <div class="p-3 pt-0 space-y-1.5 border-t border-slate-800">
+                                ${etapasConcluidas.map(e => `
+                                    <div class="flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl text-xs text-slate-300">
+                                        <span>${e.nome}</span>
+                                        <span class="text-[10px] text-emerald-400 font-semibold">10/10 OK</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
+                    ` : ''}
+
+                    <!-- ETAPA ATUAL EM DESTAQUE -->
+                    ${etapaAtualObj && p.statusGeral !== 'Finalizado' ? `
+                        <div class="bg-slate-800 border-2 ${p.statusGeral === 'Pausado' ? 'border-amber-500/60' : 'border-blue-500/60'} rounded-2xl p-4 space-y-3 shadow-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-white">${etapaAtualObj.nome}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${p.statusGeral === 'Pausado' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">
+                                    ${p.emTrabalho ? 'Em Trabalho Ativo' : p.statusGeral}
+                                </span>
+                            </div>
+
+                            ${p.motivoPausa ? `<p class="text-xs text-amber-300 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${p.motivoPausa}</p>` : ''}
+
+                            <div class="text-xs text-slate-400 flex justify-between items-center">
+                                <span>Progresso Questionário:</span>
+                                <span class="text-blue-400 font-bold">${stateAtual.respostas.filter(r=>r).length}/10 itens</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                ${!p.emTrabalho ? `
+                                    <button onclick="alternarTrabalho('${p.id}', ${etapaAtualObj.id}, true)" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
+                                        <i class="fa-solid fa-play mr-1"></i> Iniciar Tarefa
+                                    </button>
+                                ` : `
+                                    <button onclick="alternarTrabalho('${p.id}', ${etapaAtualObj.id}, false)" class="bg-rose-600 hover:bg-rose-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
+                                        <i class="fa-solid fa-stop mr-1"></i> Parar Tarefa
+                                    </button>
+                                `}
+                                <button onclick="abrirQuestionario('${p.id}', ${etapaAtualObj.id})" class="bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs font-bold transition">
+                                    <i class="fa-solid fa-list-check mr-1"></i> Questionário
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- ETAPAS FUTURAS (DESATIVADAS E AGRUPADAS EM JANELA RETRÁTIL) -->
+                    ${etapasFuturas.length > 0 ? `
+                        <details class="bg-slate-900/70 border border-slate-800 rounded-2xl overflow-hidden">
+                            <summary class="p-3.5 text-xs font-bold text-slate-400 cursor-pointer flex justify-between items-center">
+                                <span><i class="fa-solid fa-lock mr-1.5"></i> Etapas Futuras Bloqueadas (${etapasFuturas.length})</span>
+                                <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                            </summary>
+                            <div class="p-3 pt-0 space-y-1.5 border-t border-slate-800/80 opacity-60">
+                                ${etapasFuturas.map(e => `
+                                    <div class="flex justify-between items-center bg-slate-950/60 p-2.5 rounded-xl text-xs text-slate-500 cursor-not-allowed">
+                                        <span>${e.nome}</span>
+                                        <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded">Aguardando anterior</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
+                    ` : ''}
                 </div>
             `;
         }
 
-        function toggleModalProjeto(show) {
-            document.getElementById('modal-projeto').classList.toggle('hidden', !show);
-        }
-
-        function salvarNovoProjeto(e) {
-            e.preventDefault();
-            const cliente = document.getElementById('novo-cliente').value;
-            const local = document.getElementById('novo-local').value;
-            const servico = document.getElementById('novo-servico').value;
-            const equipamento = document.getElementById('novo-equipamento').value;
-            const novoId = `PRJ-0${appData.projetos.length + 1}`;
-
-            const novoProj = {
-                id: novoId,
-                cliente, local, servico, equipamento,
-                etapaAtualId: 2,
-                statusGeral: "Em Execução",
-                motivoPausa: "",
-                etapasState: {
-                    1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:10"}] },
-                    2: { status: "Em Execução", respostas: Array(10).fill(""), logs: [{inicio: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), fim: ""}] }
-                }
-            };
-
-            appData.projetos.push(novoProj);
-            salvarStorage();
-            toggleModalProjeto(false);
-            switchTab('projetos');
-        }
-
-        function iniciarTarefa(projetoId, etapaId) {
+        // Lógica Iniciar / Parar Tarefa (Abre formulário ao parar)
+        function alternarTrabalho(projetoId, etapaId, iniciar) {
             const p = appData.projetos.find(x => x.id === projetoId);
             if(!p.etapasState[etapaId]) {
                 p.etapasState[etapaId] = { status: "Em Execução", respostas: Array(10).fill(""), logs: [] };
             }
-            const horaAtual = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            p.etapasState[etapaId].logs.push({ inicio: horaAtual, fim: "" });
-            p.statusGeral = "Em Execução";
-            p.motivoPausa = "";
-            salvarStorage();
-            renderDetalhesProjeto(projetoId);
+            const hora = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            if(iniciar) {
+                p.emTrabalho = true;
+                p.statusGeral = "Em Execução";
+                p.etapasState[etapaId].logs.push({ inicio: hora, fim: "" });
+                registrarLog(projetoId, `Tarefa iniciada na etapa ${etapaId} às ${hora}.`);
+                salvarStorage();
+                renderDetalhesProjeto(projetoId);
+            } else {
+                p.emTrabalho = false;
+                const logs = p.etapasState[etapaId].logs;
+                if(logs.length > 0) logs[logs.length - 1].fim = hora;
+                registrarLog(projetoId, `Tarefa pausada/parada na etapa ${etapaId} às ${hora}.`);
+                salvarStorage();
+                renderDetalhesProjeto(projetoId);
+                // Abre automaticamente o questionário para atualizar o status
+                abrirQuestionario(projetoId, etapaId);
+            }
         }
 
+        // QUESTIONÁRIO COM BOTÕES DE RÁDIO E SALVAMENTO INTELIGENTE
         function abrirQuestionario(projetoId, etapaId) {
             activeProjetoId = projetoId;
             activeEtapaId = etapaId;
@@ -583,19 +831,27 @@
             const state = p.etapasState[etapaId] || { respostas: Array(10).fill("") };
 
             document.getElementById('q-titulo-etapa').innerText = `${p.id} - ${etapa.nome}`;
-            
             const container = document.getElementById('q-container-perguntas');
+
             container.innerHTML = PERGUNTAS_BASE.map((pergunta, idx) => {
-                const respAtual = state.respostas[idx] || "";
+                const resp = state.respostas[idx] || "";
                 return `
                     <div class="bg-slate-800 p-3 rounded-xl space-y-2 border border-slate-700">
                         <p class="text-xs font-medium text-slate-200">${pergunta}</p>
-                        <select id="resp-${idx}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
-                            <option value="">Selecione a resposta...</option>
-                            <option value="Sim" ${respAtual === 'Sim' ? 'selected' : ''}>Sim / Conforme</option>
-                            <option value="Não" ${respAtual === 'Não' ? 'selected' : ''}>Não / Problema</option>
-                            <option value="N/A" ${respAtual === 'N/A' ? 'selected' : ''}>N/A</option>
-                        </select>
+                        <div class="grid grid-cols-3 gap-1.5 pt-1">
+                            <div>
+                                <input type="radio" name="q-${idx}" id="q-${idx}-sim" value="Sim" class="hidden radio-btn" ${resp === 'Sim' ? 'checked' : ''}>
+                                <label for="q-${idx}-sim" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer transition">Sim</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="q-${idx}" id="q-${idx}-nao" value="Não" class="hidden radio-btn-no" ${resp === 'Não' ? 'checked' : ''}>
+                                <label for="q-${idx}-nao" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer transition">Não</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="q-${idx}" id="q-${idx}-na" value="N/A" class="hidden radio-btn-na" ${resp === 'N/A' ? 'checked' : ''}>
+                                <label for="q-${idx}-na" class="block text-center py-1.5 px-2 rounded-lg border border-slate-600 text-[11px] font-semibold text-slate-300 cursor-pointer transition">N/A</label>
+                            </div>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -603,89 +859,465 @@
             document.getElementById('modal-questionario').classList.remove('hidden');
         }
 
-        function fecharQuestionario() {
-            document.getElementById('modal-questionario').classList.add('hidden');
-        }
-
-        function salvarProgressoQuest(tentarEncerrar) {
+        function processarFormularioEtapa() {
             const p = appData.projetos.find(x => x.id === activeProjetoId);
             if(!p.etapasState[activeEtapaId]) {
-                p.etapasState[activeEtapaId] = { respostas: [], status: "Em Execução", logs: [] };
+                p.etapasState[activeEtapaId] = { status: "Em Execução", respostas: [], logs: [] };
             }
 
-            let novasRespostas = [];
-            let temProblema = false;
-            let emBranco = false;
+            let respostas = [];
+            let temNao = false;
+            let temVazio = false;
 
             for(let i=0; i<10; i++) {
-                const val = document.getElementById(`resp-${i}`).value;
-                novasRespostas.push(val);
-                if(!val) emBranco = true;
-                if(val === 'Não') temProblema = true;
+                const checked = document.querySelector(`input[name="q-${i}"]:checked`);
+                const val = checked ? checked.value : "";
+                respostas.push(val);
+                if(!val) temVazio = true;
+                if(val === 'Não') temNao = true;
             }
 
-            p.etapasState[activeEtapaId].respostas = novasRespostas;
+            p.etapasState[activeEtapaId].respostas = respostas;
 
-            if(tentarEncerrar) {
-                if(emBranco) {
-                    alert("Atenção: Existem perguntas em branco no questionário.");
-                    return;
-                }
-
-                if(temProblema) {
-                    const motivo = prompt("Foi detectado um problema. Digite o motivo do bloqueio:");
-                    p.etapasState[activeEtapaId].status = "Pausado";
-                    p.statusGeral = "Pausado";
-                    p.motivoPausa = motivo || "Problema apontado no questionário";
-                    alert("Projeto entrou em PAUSA.");
+            if(temNao) {
+                const motivo = prompt("Você marcou 'Não' em um ou mais itens. Descreva o problema / motivo da pausa:");
+                p.statusGeral = "Pausado";
+                p.emTrabalho = false;
+                p.motivoPausa = motivo || "Pendência apontada no questionário.";
+                p.etapasState[activeEtapaId].status = "Pausado";
+                registrarLog(p.id, `Etapa ${activeEtapaId} pausada: ${p.motivoPausa}`);
+                alert("Progresso salvo! Como há pendências ('Não'), o projeto entrou em PAUSA.");
+            } else if(!temVazio) {
+                // Todas as 10 perguntas respondidas sem "Não" -> Conclui automaticamente!
+                p.etapasState[activeEtapaId].status = "Finalizado";
+                p.emTrabalho = false;
+                p.motivoPausa = "";
+                if(activeEtapaId < 10) {
+                    p.etapaAtualId = activeEtapaId + 1;
+                    p.statusGeral = "Em Execução";
+                    registrarLog(p.id, `Etapa ${activeEtapaId} concluída! Etapa ${p.etapaAtualId} liberada.`);
+                    alert("Tudo certo! Todas as 10 perguntas foram validadas e a etapa foi CONCLUÍDA automaticamente.");
                 } else {
-                    p.etapasState[activeEtapaId].status = "Finalizado";
-                    if(activeEtapaId < 10) {
-                        p.etapaAtualId = activeEtapaId + 1;
-                        if(!p.etapasState[p.etapaAtualId]) {
-                            p.etapasState[p.etapaAtualId] = { status: "Em Execução", respostas: Array(10).fill(""), logs: [{inicio: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), fim: ""}] };
-                        }
-                    } else {
-                        p.statusGeral = "Finalizado";
-                    }
-                    if(p.statusGeral !== "Pausado") {
-                        p.statusGeral = activeEtapaId === 10 ? "Finalizado" : "Em Execução";
-                        p.motivoPausa = "";
-                    }
-                    alert("Etapa validada com sucesso!");
+                    p.statusGeral = "Finalizado";
+                    registrarLog(p.id, `Projeto finalizado com sucesso!`);
+                    alert("Projeto 100% concluído!");
                 }
             } else {
-                alert("Progresso salvo com sucesso!");
+                // Parcial sem problemas
+                p.statusGeral = "Em Execução";
+                registrarLog(p.id, `Progresso parcial salvo na etapa ${activeEtapaId} (${respostas.filter(r=>r).length}/10).`);
+                alert("Progresso parcial salvo! Responda os itens restantes para concluir a etapa.");
             }
 
             salvarStorage();
-            fecharQuestionario();
+            fecharModal('modal-questionario');
             renderDetalhesProjeto(activeProjetoId);
         }
 
-        function abrirDocs(titulo) {
-            document.getElementById('doc-titulo').innerText = titulo;
-            document.getElementById('modal-docs').classList.remove('hidden');
+        // ANEXAR ARQUIVOS
+        function salvarArquivoProjeto(e) {
+            e.preventDefault();
+            const p = appData.projetos.find(x => x.id === activeProjetoId);
+            const nome = document.getElementById('arq-nome').value;
+            const tipo = document.getElementById('arq-tipo').value;
+            if(!p.arquivos) p.arquivos = [];
+            p.arquivos.push({ nome, tipo, data: new Date().toLocaleDateString('pt-BR') });
+            registrarLog(p.id, `Arquivo "${nome}" anexado ao projeto.`);
+            salvarStorage();
+            fecharModal('modal-arquivo');
+            renderDetalhesProjeto(activeProjetoId);
         }
 
-        function fecharDocs() {
-            document.getElementById('modal-docs').classList.add('hidden');
+        // IMPRIMIR ETIQUETA
+        function abrirEtiqueta(projetoId) {
+            const p = appData.projetos.find(x => x.id === projetoId);
+            document.getElementById('etiqueta-preview').innerHTML = `
+                <div class="border-b-2 border-slate-900 pb-2 flex justify-between items-center">
+                    <span class="font-black text-sm">OPERACIONAL PRO</span>
+                    <span class="font-mono font-bold text-xs bg-slate-900 text-white px-2 py-0.5 rounded">${p.id}</span>
+                </div>
+                <div class="py-1">
+                    <p class="text-[10px] uppercase text-slate-500 font-bold">Cliente / Destinatário</p>
+                    <p class="text-sm font-black">${p.cliente}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs border-t border-slate-300 pt-2">
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold">Equipamento</p>
+                        <p class="font-bold">${p.equipamento}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-500 font-bold">Serviço</p>
+                        <p class="font-bold">${p.servico}</p>
+                    </div>
+                </div>
+                <div class="text-[10px] text-slate-600 pt-1">
+                    <strong>Local:</strong> ${p.local}
+                </div>
+            `;
+            registrarLog(p.id, "Visualizada etiqueta de identificação para impressão.");
+            document.getElementById('modal-etiqueta').classList.remove('hidden');
+        }
+
+        function abrirModalNovoProjeto() {
+            const sel = document.getElementById('novo-proj-cliente');
+            sel.innerHTML = appData.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+            document.getElementById('modal-projeto').classList.remove('hidden');
+        }
+
+        function salvarNovoProjeto(e) {
+            e.preventDefault();
+            const cliId = document.getElementById('novo-proj-cliente').value;
+            const cliObj = appData.clientes.find(c => c.id === cliId);
+            const local = document.getElementById('novo-proj-local').value;
+            const servico = document.getElementById('novo-proj-servico').value;
+            const equipamento = document.getElementById('novo-proj-equip').value;
+            const novoId = `PRJ-00${appData.projetos.length + 1}`;
+
+            appData.projetos.push({
+                id: novoId,
+                clienteId: cliId,
+                cliente: cliObj ? cliObj.nome : "Cliente",
+                local, servico, equipamento,
+                etapaAtualId: 2,
+                statusGeral: "Em Execução",
+                motivoPausa: "",
+                emTrabalho: false,
+                arquivos: [],
+                etapasState: {
+                    1: { status: "Finalizado", respostas: Array(10).fill("Sim"), logs: [{inicio: "08:00", fim: "08:10"}] }
+                }
+            });
+
+            registrarLog(novoId, `Novo projeto criado para ${cliObj.nome}. Venda concluída.`);
+            salvarStorage();
+            fecharModal('modal-projeto');
+            navigate('projetos');
+        }
+
+        // -------------------------------------------------------------
+        // 3. CLIENTES (LISTA, CADASTRO, EDIÇÃO & TELA ÚNICA)
+        // -------------------------------------------------------------
+        function renderClientes(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">Clientes Cadastrados</h2>
+                        <button onclick="abrirModalCliente()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-xs font-medium">
+                            <i class="fa-solid fa-plus mr-1"></i> Novo Cliente
+                        </button>
+                    </div>
+                    <div class="space-y-2">
+                        ${appData.clientes.map(c => `
+                            <div onclick="abrirCliente('${c.id}')" class="bg-slate-800/80 border border-slate-700/60 p-3.5 rounded-2xl cursor-pointer hover:border-blue-500/50 transition flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] font-bold text-purple-400">${c.id}</span>
+                                    <h3 class="text-sm font-bold text-white">${c.nome}</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-phone mr-1"></i>${c.tel} • ${c.cidade}</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function abrirCliente(id) {
+            activeClienteId = id;
+            document.getElementById('header-title').innerText = `Cliente ${id}`;
+            renderCurrentView();
+        }
+
+        function renderDetalhesCliente(id) {
+            const c = appData.clientes.find(x => x.id === id);
+            const projsCliente = appData.projetos.filter(p => p.clienteId === id || p.cliente === c.nome);
+            const container = document.getElementById('main-content');
+
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <button onclick="navigate('clientes')" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-xl text-xs border border-slate-700">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Voltar
+                        </button>
+                        <button onclick="abrirModalCliente('${c.id}')" class="bg-blue-600/20 text-blue-400 px-3 py-1.5 rounded-xl text-xs border border-blue-500/30 font-medium">
+                            <i class="fa-solid fa-pen mr-1"></i> Editar Dados
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-800/80 border border-slate-700/60 p-4 rounded-2xl space-y-1">
+                        <span class="text-[10px] font-bold text-purple-400">${c.id}</span>
+                        <h2 class="text-base font-bold text-white">${c.nome}</h2>
+                        <p class="text-xs text-slate-300"><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i>${c.tel}</p>
+                        <p class="text-xs text-slate-300"><i class="fa-solid fa-location-dot mr-1.5 text-slate-400"></i>${c.cidade}</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Projetos deste Cliente (${projsCliente.length})</h3>
+                        ${projsCliente.length === 0 ? '<p class="text-xs text-slate-500">Nenhum projeto registrado.</p>' : ''}
+                        ${projsCliente.map(p => `
+                            <div onclick="abrirProjeto('${p.id}')" class="bg-slate-800/60 border border-slate-700 p-3 rounded-xl cursor-pointer flex justify-between items-center">
+                                <div>
+                                    <span class="text-xs font-bold text-blue-400">${p.id}</span> - <span class="text-xs text-white font-medium">${p.servico}</span>
+                                    <p class="text-[11px] text-slate-400">${p.equipamento}</p>
+                                </div>
+                                <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-200">${p.statusGeral}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function abrirModalCliente(editId = null) {
+            document.getElementById('cli-edit-id').value = editId || '';
+            if(editId) {
+                const c = appData.clientes.find(x => x.id === editId);
+                document.getElementById('modal-cli-titulo').innerText = "Editar Cliente";
+                document.getElementById('cli-nome').value = c.nome;
+                document.getElementById('cli-tel').value = c.tel;
+                document.getElementById('cli-cidade').value = c.cidade;
+            } else {
+                document.getElementById('modal-cli-titulo').innerText = "Novo Cliente";
+                document.getElementById('cli-nome').value = '';
+                document.getElementById('cli-tel').value = '';
+                document.getElementById('cli-cidade').value = '';
+            }
+            document.getElementById('modal-cliente').classList.remove('hidden');
+        }
+
+        function salvarCliente(e) {
+            e.preventDefault();
+            const editId = document.getElementById('cli-edit-id').value;
+            const nome = document.getElementById('cli-nome').value;
+            const tel = document.getElementById('cli-tel').value;
+            const cidade = document.getElementById('cli-cidade').value;
+
+            if(editId) {
+                const c = appData.clientes.find(x => x.id === editId);
+                c.nome = nome; c.tel = tel; c.cidade = cidade;
+                registrarLog(editId, `Dados do cliente ${nome} atualizados.`);
+            } else {
+                const novoId = `CLI-00${appData.clientes.length + 1}`;
+                appData.clientes.push({ id: novoId, nome, tel, cidade });
+                registrarLog(novoId, `Novo cliente cadastrado: ${nome}.`);
+            }
+            salvarStorage();
+            fecharModal('modal-cliente');
+            renderCurrentView();
+        }
+
+        // -------------------------------------------------------------
+        // 4. AGENDA MENSAL E COMPROMISSOS
+        // -------------------------------------------------------------
+        function renderAgenda(container) {
+            const ano = mesAgendaAtual.getFullYear();
+            const mes = mesAgendaAtual.getMonth();
+            const nomesMeses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+            const primeiroDia = new Date(ano, mes, 1).getDay();
+            const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+
+            let diasHtml = '';
+            for(let i=0; i<primeiroDia; i++) diasHtml += `<div></div>`;
+            for(let d=1; d<=diasNoMes; d++) {
+                const dataStr = `${ano}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                const temEvento = appData.agenda.some(ev => ev.data === dataStr);
+                diasHtml += `
+                    <div class="p-1.5 text-center rounded-xl text-xs font-medium ${temEvento ? 'bg-blue-600 text-white font-bold shadow' : 'text-slate-300 bg-slate-800/50'}">
+                        ${d}
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">${nomesMeses[mes]} ${ano}</h2>
+                        <div class="flex space-x-1">
+                            <button onclick="mudarMes(-1)" class="bg-slate-800 px-2.5 py-1 rounded-lg text-xs text-slate-300"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button onclick="mudarMes(1)" class="bg-slate-800 px-2.5 py-1 rounded-lg text-xs text-slate-300"><i class="fa-solid fa-chevron-right"></i></button>
+                            <button onclick="abrirModalEvento()" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-medium ml-1"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/70 border border-slate-800 p-3 rounded-2xl">
+                        <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-500 mb-2">
+                            <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1">
+                            ${diasHtml}
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Agendamentos do Mês</h3>
+                        ${appData.agenda.map(ev => `
+                            <div class="bg-slate-800/80 border border-slate-700/60 p-3 rounded-xl flex justify-between items-center">
+                                <div>
+                                    <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">${ev.data.split('-').reverse().join('/')}</span>
+                                    <span class="text-[10px] font-bold text-slate-400 ml-1">${ev.projetoId}</span>
+                                    <p class="text-xs font-bold text-white mt-1">${ev.titulo}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function mudarMes(delta) {
+            mesAgendaAtual.setMonth(mesAgendaAtual.getMonth() + delta);
+            renderCurrentView();
+        }
+
+        function abrirModalEvento() {
+            const sel = document.getElementById('ev-projeto');
+            sel.innerHTML = `<option value="GERAL">Geral / Sem Projeto</option>` + appData.projetos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente}</option>`).join('');
+            document.getElementById('modal-evento').classList.remove('hidden');
+        }
+
+        function salvarEvento(e) {
+            e.preventDefault();
+            const data = document.getElementById('ev-data').value;
+            const projetoId = document.getElementById('ev-projeto').value;
+            const titulo = document.getElementById('ev-titulo').value;
+            appData.agenda.push({ id: `EV-00${appData.agenda.length+1}`, data, projetoId, titulo });
+            registrarLog("Agenda", `Agendado: "${titulo}" para ${data}.`);
+            salvarStorage();
+            fecharModal('modal-evento');
+            renderCurrentView();
+        }
+
+        // -------------------------------------------------------------
+        // 5. DESPESAS (AGRUPADAS POR PROJETO + EDIÇÃO)
+        // -------------------------------------------------------------
+        function renderDespesas(container) {
+            const totalGeral = appData.despesas.reduce((acc, d) => acc + d.valor, 0);
+            const grupos = {};
+            appData.despesas.forEach(d => {
+                if(!grupos[d.projetoId]) grupos[d.projetoId] = [];
+                grupos[d.projetoId].push(d);
+            });
+
+            container.innerHTML = `
+                <div class="p-4 space-y-4">
+                    <div class="flex justify-between items-center bg-slate-800/80 border border-slate-700 p-3.5 rounded-2xl">
+                        <div>
+                            <p class="text-[11px] text-slate-400">Total Geral Acumulado</p>
+                            <p class="text-lg font-bold text-emerald-400">R$ ${totalGeral.toFixed(2)}</p>
+                        </div>
+                        <button onclick="abrirModalDespesa()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 rounded-xl text-xs font-bold">
+                            <i class="fa-solid fa-plus mr-1"></i> Nova Despesa
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        ${Object.keys(grupos).map(projId => {
+                            const lista = grupos[projId];
+                            const subtotal = lista.reduce((acc, x) => acc + x.valor, 0);
+                            const projObj = appData.projetos.find(p => p.id === projId);
+                            const tituloGrupo = projId === 'EXTRA' ? '⭐ Despesas Extras / Avulsas' : `${projId} - ${projObj ? projObj.cliente : 'Projeto'}`;
+
+                            return `
+                                <details open class="bg-slate-800/70 border border-slate-700/70 rounded-2xl overflow-hidden">
+                                    <summary class="p-3.5 text-xs font-bold text-white cursor-pointer flex justify-between items-center bg-slate-800">
+                                        <span>${tituloGrupo}</span>
+                                        <span class="text-emerald-400">R$ ${subtotal.toFixed(2)}</span>
+                                    </summary>
+                                    <div class="p-3 space-y-2">
+                                        ${lista.map(d => `
+                                            <div class="bg-slate-900/80 border border-slate-800 p-2.5 rounded-xl flex justify-between items-center">
+                                                <div>
+                                                    <span class="text-xs font-bold text-slate-200">${d.categoria}</span>
+                                                    <p class="text-[11px] text-slate-400">${d.obs} • ${d.data}</p>
+                                                </div>
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="text-xs font-bold text-emerald-400">R$ ${d.valor.toFixed(2)}</span>
+                                                    <button onclick="abrirModalDespesa('${d.id}')" class="text-slate-400 hover:text-blue-400 p-1">
+                                                        <i class="fa-solid fa-pen text-xs"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </details>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function abrirModalDespesa(editId = null, preSelectProj = null) {
+            const projetosAtivos = appData.projetos.filter(p => p.statusGeral !== 'Finalizado' && p.statusGeral !== 'Cancelado');
+            const sel = document.getElementById('desp-projeto');
+            sel.innerHTML = `<option value="EXTRA">⭐ Despesa Extra / Avulsa</option>` + projetosAtivos.map(p => `<option value="${p.id}">${p.id} - ${p.cliente} (${p.statusGeral})</option>`).join('');
+
+            document.getElementById('desp-edit-id').value = editId || '';
+            if(editId) {
+                const d = appData.despesas.find(x => x.id === editId);
+                document.getElementById('modal-desp-titulo').innerText = "Editar Despesa";
+                sel.value = d.projetoId;
+                document.getElementById('desp-cat').value = d.categoria;
+                document.getElementById('desp-valor').value = d.valor;
+                document.getElementById('desp-obs').value = d.obs;
+            } else {
+                document.getElementById('modal-desp-titulo').innerText = "Lançar Despesa";
+                if(preSelectProj) sel.value = preSelectProj;
+                document.getElementById('desp-valor').value = '';
+                document.getElementById('desp-obs').value = '';
+            }
+            document.getElementById('modal-despesa').classList.remove('hidden');
         }
 
         function salvarDespesa(e) {
             e.preventDefault();
+            const editId = document.getElementById('desp-edit-id').value;
             const projetoId = document.getElementById('desp-projeto').value;
             const categoria = document.getElementById('desp-cat').value;
             const valor = parseFloat(document.getElementById('desp-valor').value);
             const obs = document.getElementById('desp-obs').value;
-            const novoId = `DSP-0${appData.despesas.length + 1}`;
 
-            appData.despesas.push({ id: novoId, projetoId, data: new Date().toLocaleDateString('pt-BR'), categoria, valor, obs });
+            if(editId) {
+                const d = appData.despesas.find(x => x.id === editId);
+                d.projetoId = projetoId; d.categoria = categoria; d.valor = valor; d.obs = obs;
+                registrarLog("Despesa", `Despesa ${editId} editada (R$ ${valor.toFixed(2)}).`);
+            } else {
+                const novoId = `DSP-00${appData.despesas.length + 1}`;
+                appData.despesas.push({ id: novoId, projetoId, data: new Date().toLocaleDateString('pt-BR'), categoria, valor, obs });
+                registrarLog("Despesa", `Nova despesa ${novoId} lançada em ${projetoId} (R$ ${valor.toFixed(2)}).`);
+            }
+
             salvarStorage();
+            fecharModal('modal-despesa');
             renderCurrentView();
-            alert("Despesa lançada com sucesso!");
         }
 
+        // -------------------------------------------------------------
+        // 6. TELA DE LOGS DO SISTEMA
+        // -------------------------------------------------------------
+        function renderLogs(container) {
+            container.innerHTML = `
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-white">Histórico de Logs do Sistema</h2>
+                        <span class="text-[10px] text-slate-400">${appData.logs.length} registros</span>
+                    </div>
+                    <div class="space-y-2">
+                        ${appData.logs.map(l => `
+                            <div class="bg-slate-800/70 border border-slate-800 p-3 rounded-xl space-y-1">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">${l.acao}</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">${l.dataHora}</span>
+                                </div>
+                                <p class="text-xs text-slate-300">${l.detalhe}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Inicialização
         renderCurrentView();
     </script>
 </body>
